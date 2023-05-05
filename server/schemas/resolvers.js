@@ -4,7 +4,9 @@ const { signToken } = require('../utils/auth');
 
 const resolvers = {
     Query: {
-
+        getEvents: async (parent, { email }) => {
+            return User.findOne({ email: email }).populate('events');
+        },
     },
 
     Mutation: {
