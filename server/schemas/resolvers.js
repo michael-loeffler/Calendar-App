@@ -31,8 +31,6 @@ const resolvers = {
             const token = signToken(user);
             return { token, user };
         },
-
-        
         addEvent: async (parent, args, context) => {
             if (context.user) {
                 const event = await Event.create(args);
@@ -45,7 +43,22 @@ const resolvers = {
                 return event;
             }
             throw new AuthenticationError('You need to be logged in!');
-        }
+        },
+        removeEvent: async (parent, {eventId}, context) => {
+            if (context.user) {
+                const event = Event.findOneAndDelete({
+                    _id: eventId
+                })
+
+                await User.findOneAndUpdate(
+                    { _id: context.user._id },
+                    { $pull: { events: eventId }}
+                );
+
+                return event;
+            }
+            throw new AuthenticationError('You need to be logged in!');
+        },
     }
 }
 
