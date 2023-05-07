@@ -1,33 +1,50 @@
-import logo from './logo.svg';
-import './App.css';
-import React, { useEffect, useState } from "react";
+import React, { useMemo } from "react";
+import 'react-big-calendar/lib/css/react-big-calendar.css';
+import { Calendar, Views, dayjsLocalizer } from 'react-big-calendar';
+import dayjs from 'dayjs';
+import timezone from 'dayjs/plugin/timezone';
 
-import { Calendar, Views, dayjsLocalizer } from 'react-big-calendar'
-import dayjs from 'dayjs'
+dayjs.extend(timezone);
+const localizer = dayjsLocalizer(dayjs);
 
-const localizer = dayjsLocalizer(dayjs)
+const ColoredDateCellWrapper = ({ children }) =>
+  React.cloneElement(React.Children.only(children), {
+    style: {
+      backgroundColor: 'lightblue',
+    },
+  });
 
-function App() {
+function App({...props}) {
+  const { components, max, views, formats } = useMemo(
+    () => ({
+      components: {
+        timeSlotWrapper: ColoredDateCellWrapper,
+      },
+      max: dayjs().endOf('day').subtract(1, 'hours').toDate(),
+      views: Object.keys(Views).map((k) => Views[k]),
+      formats: {
+        dateFormat: (date, culture, localizer) =>
+        localizer.format(date, 'D', culture),
+      },
+    }),
+    []
+  );
 
   return (
-    <div className="height600">
+    <div className="mt-2" {...props}>
       <Calendar
-        // components={components}
-        // defaultDate={defaultDate}
-        // events={events}
         localizer={localizer}
-        showMultiDayTimes
-        step={60}
-        // views={views}
+        components={components}
+        max={max}
+        views={views}
+        formats={formats}
+        // showMultiDayTimes
+        // events={events}
         // events={myEventsList}
-        startAccessor="start"
-        endAccessor="end"
-        // style={{ height: 500 }}
+        style={{ height: 800 }}
       />
     </div>
   )
-  
-
 }
  
 export default App;
