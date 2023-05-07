@@ -4,8 +4,8 @@ import { Calendar, Views, dayjsLocalizer } from 'react-big-calendar';
 import dayjs from 'dayjs';
 import timezone from 'dayjs/plugin/timezone';
 
-import { Calendar, Views, dayjsLocalizer } from 'react-big-calendar'
-import dayjs from 'dayjs'
+dayjs.extend(timezone);
+const localizer = dayjsLocalizer(dayjs);
 
 const localizer = dayjsLocalizer(dayjs)
 
