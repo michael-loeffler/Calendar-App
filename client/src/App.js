@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useCallback, useState } from "react";
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { Calendar, Views, dayjsLocalizer } from 'react-big-calendar';
 import dayjs from 'dayjs';
@@ -29,6 +29,23 @@ function App({...props}) {
     }),
     []
   );
+  const [myEvents, setEvents] = useState([])
+  const handleSelectSlot = useCallback(
+    ({ start, end }) => {
+      const title = window.prompt('New Event name')
+      if (title) {
+        setEvents((prev) => [...prev, { start, end, title }])
+      }
+      // trigger NewEventForm modal and pre-populate start and end time
+    },
+    [setEvents]
+  )
+
+  const handleSelectEvent = useCallback(
+    (event) => window.alert(event.title),
+    // trigger EventDetails modal (haven't discussed yet)
+    []
+  )
 
   return (
     <div className="mt-2" {...props}>
@@ -38,9 +55,13 @@ function App({...props}) {
         max={max}
         views={views}
         formats={formats}
+        events={myEvents}
+        selectable
+        onSelectSlot={handleSelectSlot}
+        onSelectEvent={handleSelectEvent}
+        // defaultView={Views.WEEK}
         // showMultiDayTimes
         // events={events}
-        // events={myEventsList}
         style={{ height: 800 }}
       />
     </div>
