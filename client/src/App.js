@@ -5,6 +5,7 @@ import dayjs from 'dayjs';
 import timezone from 'dayjs/plugin/timezone';
 import CreateEvent from './components/CreateEvent';
 import seedEvents from './components/SeedEvents';
+import './index.css';
 
 dayjs.extend(timezone);
 const localizer = dayjsLocalizer(dayjs);
