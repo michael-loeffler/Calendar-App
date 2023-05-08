@@ -37,6 +37,23 @@ function App({...props}) {
     }),
     []
   );
+  const [myEvents, setEvents] = useState([])
+  const handleSelectSlot = useCallback(
+    ({ start, end }) => {
+      const title = window.prompt('New Event name')
+      if (title) {
+        setEvents((prev) => [...prev, { start, end, title }])
+      }
+      // trigger NewEventForm modal and pre-populate start and end time
+    },
+    [setEvents]
+  )
+
+  const handleSelectEvent = useCallback(
+    (event) => window.alert(event.title),
+    // trigger EventDetails modal (haven't discussed yet)
+    []
+  )
 
   const handleSelectSlot = (slotInfo) => {
     setShowCreateEventModal(true);
