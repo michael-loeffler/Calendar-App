@@ -25,9 +25,15 @@ export const ADD_USER = gql`
 `;
 
 export const ADD_EVENT = gql`
-  mutation addEvent($title: String!, $date: Date!, $startTime: Date!, $endTime: Date!, $location: String, $description: String) {
-    addEvent(title: $title, date: $date, startTime: $startTime, endTime: $endTime, location: $location, description: $description) {
-      event
+  mutation addEvent($title: String!, $start: Date!, $end: Date!, $location: String, $description: String, $allDay: Boolean) {
+    addEvent(title: $title, start: $start, end: $end, location: $location, description: $description, allDay: $allDay) {
+      _id
+      title
+      start
+      end
+      location
+      description
+      allDay
     }
   }
 `;
@@ -35,15 +41,27 @@ export const ADD_EVENT = gql`
 export const REMOVE_EVENT = gql`
   mutation removeEvent($eventId: ID!) {
   removeEvent(eventId: $eventId) {
-    event 
+    _id
+     title
+     start
+     end
+     location
+     description
+     allDay 
     }
   } 
 `;
 
 export const UPDATE_EVENT = gql`
-  mutation updateEvent($eventId: ID!, $title: String, $date: Date, $startTime: Date, $endTime: Date, $location: String, $description: String) {
-    updateEvent(eventId: $eventId, title: $title, date: $date, startTime: $startTime, endTime: $endTime, location: $location, description: $description) {
-      event
+  mutation updateEvent($title: String!, $start: Date!, $end: Date!, $location: String, $description: String, $allDay: Boolean) {
+    updateEvent(title: $title, start: $start, end: $end, location: $location, description: $description, allDay: $allDay) {
+      _id
+      title
+      start
+      end
+      location
+      description
+      allDay
     }
   }
 `;
