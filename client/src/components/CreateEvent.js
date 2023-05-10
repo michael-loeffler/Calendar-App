@@ -11,7 +11,7 @@ const CreateEvent = ({start, end, onCreateEvent}) => {
   // const [title, setTitle] = useState('');
   // const [start, setStart] = useState('');
   // const [end, setEnd] = useState('');
-  const [eventData, setEventData] = useState({title: '', start: start || '', end: end || '', description: '', location: '', allDay: ''})
+  const [eventData, setEventData] = useState({title: '', start: start || '', end: end || '', description: '', location: '', allDay: false})
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -32,7 +32,7 @@ const CreateEvent = ({start, end, onCreateEvent}) => {
     console.log('response: ', response);
     setEventData({title: '', start: '', end: '', description: '', location: '', allDay: ''});
     setIsOpen(false);
-    onCreateEvent(response);
+    onCreateEvent(response.data.addEvent);
     } catch (error) {
       console.error(error);
     }
