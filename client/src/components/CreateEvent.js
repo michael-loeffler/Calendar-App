@@ -1,14 +1,22 @@
 import React, { useState } from 'react';
+import { useMutation } from '@apollo/client'
+import { ADD_EVENT } from '../utils/mutations'
 import Modal from 'react-modal';
-import dayjs from 'dayjs';
 
 Modal.setAppElement('#root');
 
-const CreateEvent = ({ onCreateEvent }) => {
+const CreateEvent = ({start, end, onCreateEvent}) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [title, setTitle] = useState('');
-  const [start, setStart] = useState('');
-  const [end, setEnd] = useState('');
+  const [addEvent] = useMutation(ADD_EVENT)
+  // const [title, setTitle] = useState('');
+  // const [start, setStart] = useState('');
+  // const [end, setEnd] = useState('');
+  const [eventData, setEventData] = useState({title: '', date: '', startTime: start || '', endTime: end || '', description: '', location: ''})
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setEventData({ ...eventData, [name]: value});
+  };
 
   const handleOpenModal = () => {
     setIsOpen(true);
@@ -18,13 +26,16 @@ const CreateEvent = ({ onCreateEvent }) => {
     setIsOpen(false);
   };
 
-  const handleCreateEvent = () => {
-    onCreateEvent({
-      title,
-      start: dayjs(start).toDate(),
-      end: dayjs(end).toDate(),
-    });
+  const handleCreateEvent = async () => {
+    try {
+    const response = await addEvent({ variables: eventData});
+    console.log('response: ', response);
+    setEventData({title: '', date: '', startTime: '', endTime: '', description: '', location: ''});
     setIsOpen(false);
+    onCreateEvent(response);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -47,22 +58,25 @@ const CreateEvent = ({ onCreateEvent }) => {
             <input
               type="text"
               placeholder="Title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
+              name="title"
+              value={eventData.title}
+              onChange={handleInputChange}
               className="border border-gray-400 rounded-lg py-2 px-4"
             />
             <input
               type="datetime-local"
               placeholder="Start"
-              value={start}
-              onChange={(e) => setStart(e.target.value)}
+              name="startTime"
+              value={eventData.startTime}
+              onChange={handleInputChange}
               className="border border-gray-400 rounded-lg py-2 px-4"
             />
             <input
               type="datetime-local"
               placeholder="End"
-              value={end}
-              onChange={(e) => setEnd(e.target.value)}
+              name="endTime"
+              value={eventData.endTime}
+              onChange={handleInputChange}
               className="border border-gray-400 rounded-lg py-2 px-4"
             />
           </div>
