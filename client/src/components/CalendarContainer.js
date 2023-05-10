@@ -4,6 +4,7 @@ import { Calendar, Views, dayjsLocalizer } from 'react-big-calendar';
 import dayjs from 'dayjs';
 import timezone from 'dayjs/plugin/timezone';
 import CreateEvent from './CreateEvent';
+// import EventDetails from './EventDetails';
 // import seedEvents from './components/SeedEvents';
 import '../index.css';
 import { useQuery } from "@apollo/client";
