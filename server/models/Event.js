@@ -6,15 +6,11 @@ const eventSchema = new Schema({
     required: true,
     trim: true,
   },
-  date: {
+  start: {
     type: Date,
     required: true,
   },
-  startTime: {
-    type: Date,
-    required: true,
-  },
-  endTime: {
+  end: {
     type: Date,
     required: true,
   },
@@ -23,6 +19,9 @@ const eventSchema = new Schema({
   },
   description: {
     type: String
+  },
+  allDay: {
+    type: Boolean
   }
 });
 

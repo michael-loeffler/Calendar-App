@@ -15,11 +15,11 @@ const typeDefs = gql`
   type Event {
     _id: ID!
     title: String!
-    date: Date!
-    startTime: Date!
-    endTime: Date!
+    start: Date!
+    end: Date!
     location: String
     description: String
+    allDay: Boolean
   }
 
   type Auth {
@@ -34,9 +34,9 @@ const typeDefs = gql`
   type Mutation {
     signup(firstName: String!, lastName: String!, email: String!, password: String!): Auth
     login(email: String!, password: String!): Auth
-    addEvent(title: String!, date: Date!, startTime: Date!, endTime: Date!, location: String, description: String): Event
+    addEvent(title: String!, start: Date!, end: Date!, location: String, description: String, allDay: Boolean): Event
     removeEvent(eventId: ID!): Event
-    updateEvent(eventId: ID!, title: String, date: Date, startTime: Date, endTime: Date, location: String, description: String): Event
+    updateEvent(eventId: ID!, title: String, start: Date, end: Date, location: String, description: String, allDay: Boolean): Event
   }
 `;
 

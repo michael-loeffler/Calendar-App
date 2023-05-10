@@ -22,16 +22,14 @@ export const QUERY_USER = gql`
 export const QUERY_EVENTS = gql`
   query getEvents($email: String!) {
     getEvents(email: $email) {
-      user {
-        events {
-          _id
-          title
-          date
-          startTime
-          endTime
-          location
-          description
-        }
+      events {
+        _id
+        title
+        start
+        end
+        location
+        description
+        allDay
       }
     }
   }

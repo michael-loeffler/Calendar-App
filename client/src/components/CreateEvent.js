@@ -11,7 +11,7 @@ const CreateEvent = ({start, end, onCreateEvent}) => {
   // const [title, setTitle] = useState('');
   // const [start, setStart] = useState('');
   // const [end, setEnd] = useState('');
-  const [eventData, setEventData] = useState( {title: '', date: '', startTime: start || '', endTime: end || '', description: '', location: ''});
+  const [eventData, setEventData] = useState({title: '', start: start || '', end: end || '', description: '', location: '', allDay: false})
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -30,9 +30,9 @@ const CreateEvent = ({start, end, onCreateEvent}) => {
     try {
     const response = await addEvent({ variables: eventData});   
     console.log('response: ', response);
-    setEventData({title: '', date: '', startTime: '', endTime: '', description: '', location: ''});
+    setEventData({title: '', start: '', end: '', description: '', location: '', allDay: ''});
     setIsOpen(false);
-    onCreateEvent(response);
+    onCreateEvent(response.data.addEvent);
     } catch (error) {
       console.error(error);
     }
@@ -67,16 +67,16 @@ const CreateEvent = ({start, end, onCreateEvent}) => {
             <input
               type="datetime-local"
               placeholder="Start"
-              name="startTime"
-              value={eventData.startTime}
+              name="start"
+              value={eventData.start}
               onChange={handleInputChange}
               className="border border-gray-400 rounded-lg py-2 px-4"
             />
             <input
               type="datetime-local"
               placeholder="End"
-              name="endTime"
-              value={eventData.endTime}
+              name="end"
+              value={eventData.end}
               onChange={handleInputChange}
               className="border border-gray-400 rounded-lg py-2 px-4"
             />
