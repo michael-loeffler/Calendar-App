@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useCallback } from "react";
+import React, { useMemo, useState, useCallback, useEffect } from "react";
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { Calendar, Views, dayjsLocalizer } from 'react-big-calendar';
 import dayjs from 'dayjs';
@@ -37,20 +37,23 @@ function CalendarContainer({ ...props }) {
         []
     );
 
+    const [events, setEvents] = useState();
     const { data } = useQuery(QUERY_EVENTS, {
         variables: { email: email },
     });
-    console.log(data);
-    const [events, setEvents] = useState(data?.getEvents.events || []);
+
+    useEffect(() => {
+        if (data && data.getEvents) {
+            setEvents(data.getEvents.events)
+        }
+    }, [data])
     const [start, setStart] = useState();
     const [end, setEnd] = useState();
-
-    // const [events, setEvents] = useState();
-    const [showModal, setShowModal] = useState(false);
-    // const [startDate, setStartDate] = useState(null);
+    const [showModal, setShowModal] = useState();
 
     const handleSelectSlot = useCallback(
         ({ start, end }) => {
+            console.log(start, end)
             setStart(start);
             setEnd(end);
             setShowModal(true);
@@ -66,7 +69,7 @@ function CalendarContainer({ ...props }) {
     );
 
     const handleCreateEvent = (event) => {
-        setEvents([...events, event]);
+        // setEvents([...events, event]);
         setShowModal(false);
     };
 
@@ -78,24 +81,26 @@ function CalendarContainer({ ...props }) {
         <div className="mt-2" {...props}>
             <CreateEvent
                 onCreateEvent={handleCreateEvent}
-                isOpen={showModal}
+                showModal={showModal}
                 onClose={handleClose}
-                // defaultStartDate={startDate}
                 start={start}
                 end={end}
             />
-            <Calendar
-                localizer={localizer}
-                components={components}
-                max={max}
-                views={views}
-                formats={formats}
-                events={events}
-                style={{ height: 800 }}
-                selectable
-                onSelectEvent={handleSelectEvent}
-                onSelectSlot={handleSelectSlot}
-            />
+            {/* {loading ? (
+                <div>Loading...</div>
+            ) : ( */}
+                <Calendar
+                    localizer={localizer}
+                    components={components}
+                    max={max}
+                    views={views}
+                    formats={formats}
+                    events={events}
+                    style={{ height: 800 }}
+                    selectable
+                    onSelectEvent={handleSelectEvent}
+                    onSelectSlot={handleSelectSlot}
+                />
         </div>
     )
 }
