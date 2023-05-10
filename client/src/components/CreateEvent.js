@@ -67,16 +67,16 @@ const CreateEvent = ({start, end, onCreateEvent}) => {
             <input
               type="datetime-local"
               placeholder="Start"
-              name="startTime"
-              value={eventData.startTime}
+              name="start"
+              value={eventData.start}
               onChange={handleInputChange}
               className="border border-gray-400 rounded-lg py-2 px-4"
             />
             <input
               type="datetime-local"
               placeholder="End"
-              name="endTime"
-              value={eventData.endTime}
+              name="end"
+              value={eventData.end}
               onChange={handleInputChange}
               className="border border-gray-400 rounded-lg py-2 px-4"
             />
