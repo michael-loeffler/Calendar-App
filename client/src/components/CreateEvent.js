@@ -25,10 +25,10 @@ const CreateEvent = ({start, end, onCreateEvent}) => {
   const handleCloseModal = () => {
     setIsOpen(false);
   };
-
+ 
   const handleCreateEvent = async () => {
     try {
-    const response = await addEvent({ variables: eventData});
+    const response = await addEvent({ variables: eventData});   
     console.log('response: ', response);
     setEventData({title: '', start: '', end: '', description: '', location: '', allDay: ''});
     setIsOpen(false);
@@ -55,6 +55,7 @@ const CreateEvent = ({start, end, onCreateEvent}) => {
         <div className="bg-white rounded-lg px-8 py-6">
           <h2 className="text-lg font-semibold mb-4">Create Event</h2>
           <div className="flex flex-col gap-4">
+            <label>Title:</label> 
             <input
               type="text"
               placeholder="Title"
@@ -76,6 +77,24 @@ const CreateEvent = ({start, end, onCreateEvent}) => {
               placeholder="End"
               name="endTime"
               value={eventData.endTime}
+              onChange={handleInputChange}
+              className="border border-gray-400 rounded-lg py-2 px-4"
+            />
+            <label>Location:</label>
+            <input
+              type="text"
+              placeholder="location"
+              name="location"
+              value={eventData.location}
+              onChange={handleInputChange}
+              className="border border-gray-400 rounded-lg py-2 px-4"
+            />
+            <label>Description:</label>
+            <input
+              type="text"
+              placeholder="description"
+              name="description"
+              value={eventData.description}
               onChange={handleInputChange}
               className="border border-gray-400 rounded-lg py-2 px-4"
             />
