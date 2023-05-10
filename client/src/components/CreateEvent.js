@@ -11,7 +11,7 @@ const CreateEvent = ({start, end, onCreateEvent}) => {
   // const [title, setTitle] = useState('');
   // const [start, setStart] = useState('');
   // const [end, setEnd] = useState('');
-  const [eventData, setEventData] = useState({title: '', date: '', startTime: start || '', endTime: end || '', description: '', location: ''})
+  const [eventData, setEventData] = useState({title: '', start: start || '', end: end || '', description: '', location: '', allDay: ''})
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -30,7 +30,7 @@ const CreateEvent = ({start, end, onCreateEvent}) => {
     try {
     const response = await addEvent({ variables: eventData});
     console.log('response: ', response);
-    setEventData({title: '', date: '', startTime: '', endTime: '', description: '', location: ''});
+    setEventData({title: '', start: '', end: '', description: '', location: '', allDay: ''});
     setIsOpen(false);
     onCreateEvent(response);
     } catch (error) {

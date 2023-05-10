@@ -15,11 +15,11 @@ const typeDefs = gql`
   type Event {
     _id: ID!
     title: String!
-    date: Date!
-    startTime: Date!
-    endTime: Date!
+    start: Date!
+    end: Date!
     location: String
     description: String
+    allDay: Boolean
   }
 
   type Auth {
