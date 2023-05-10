@@ -6,7 +6,7 @@ import timezone from 'dayjs/plugin/timezone';
 import CreateEvent from './CreateEvent';
 // import seedEvents from './components/SeedEvents';
 import '../index.css';
-import { useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/react-hooks";
 import { QUERY_EVENTS } from '../utils/queries';
 const email = 'michael@test.com'
 dayjs.extend(timezone);
@@ -37,9 +37,10 @@ function CalendarContainer({ ...props }) {
     );
 
     const { data } = useQuery(QUERY_EVENTS, {
-        variables: { email },
+        variables: { email: email },
     });
-    const [events, setEvents] = useState(data?.events || []);
+    console.log(data);
+    const [events, setEvents] = useState(data?.getEvents.events || []);
     const [start, setStart] = useState();
     const [end, setEnd] = useState();
 

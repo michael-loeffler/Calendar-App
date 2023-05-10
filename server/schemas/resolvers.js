@@ -6,7 +6,7 @@ const { GraphQLScalarType, Kind } = require('graphql');
 const resolvers = {
   Query: {
     getEvents: async (parent, { email }) => {
-      return User.findOne({ email: email }).populate('events');
+      return User.findOne({ email }).populate('events');
     },
   },
 
