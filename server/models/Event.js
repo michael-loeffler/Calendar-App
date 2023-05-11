@@ -22,7 +22,11 @@ const eventSchema = new Schema({
   },
   allDay: {
     type: Boolean
-  }
+  },
+  color: {
+    type: String,
+  },
+ 
 });
 
 const Event = model('Event', eventSchema);
