@@ -30,6 +30,7 @@ export const QUERY_EVENTS = gql`
         location
         description
         allDay
+        color
       }
     }
   }

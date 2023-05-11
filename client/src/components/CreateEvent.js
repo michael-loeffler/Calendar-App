@@ -15,7 +15,7 @@ const CreateEvent = ({start, end, onCreateEvent, showModal, onClose, toggleModal
 
   const [addEvent] = useMutation(ADD_EVENT)
   
-  const [eventData, setEventData] = useState({title: '', start: start || '', end: end || '', description: '', location: '', allDay: false});
+  const [eventData, setEventData] = useState({title: '', start: start || '', end: end || '', description: '', location: '', allDay: false, color: ''});
   
   useEffect(() => {
     setEventData({...eventData, start: start, end: end})
@@ -29,11 +29,11 @@ const CreateEvent = ({start, end, onCreateEvent, showModal, onClose, toggleModal
 
   const handleCreateEvent = async () => {
     try {
-    const response = await addEvent({ variables: eventData });   
-    console.log('response: ', response);
-    setEventData({title: '', start: '', end: '', description: '', location: '', allDay: false});
-    setIsOpen(false);
-    onCreateEvent(response.data.addEvent);
+      const response = await addEvent({ variables: eventData });   
+      console.log('response: ', response);
+      setEventData({ title: '', start: '', end: '', description: '', location: '', allDay: false, color: '' });
+      setIsOpen(false);
+      onCreateEvent(response.data.addEvent);
     } catch (error) {
       console.error(error);
     }
@@ -99,6 +99,17 @@ const CreateEvent = ({start, end, onCreateEvent, showModal, onClose, toggleModal
               onChange={handleInputChange}
               className="border border-gray-400 rounded-lg py-2 px-4"
             />
+          </div>
+          <div className="form-group">
+            <label>Color</label>
+            <select name="color" value={eventData.color} onChange={handleInputChange}>
+              <option value="">Select a color</option>
+              <option value="lightblue">Light Blue</option>
+              <option value="lightgreen">Light Green</option>
+              <option value="lightpink">Light Pink</option>
+              <option value="lightyellow">Light Yellow</option>
+              <option value="lightcoral">Light Coral</option>
+            </select>
           </div>
           <div className="mt-6 flex justify-end">
             <button
