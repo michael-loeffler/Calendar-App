@@ -1,14 +1,26 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useState, useEffect } from 'react'
 import Modal from 'react-modal'
 import { useMutation } from "@apollo/client"
 import { REMOVE_EVENT, UPDATE_EVENT } from "../utils/mutations"
 
-const eventDetail = ({onEventDetail}) =>
-{
-  const [updateEvent] = useMutation (UPDATE_EVENT)
-  const[removeEvent]= useMutation (REMOVE_EVENT)
-  const [eventData, setEventData] = useState({ title: '', start: '', end: '', description: '', location: '', allDay: false, color})
+Modal.setAppElement('#root');
 
+const EventDetail = ({onEventDetail, showModal, onClose, toggleModal}) => {
+  const [isOpen, setIsOpen] = useState(showModal);
+
+  useEffect(() => {
+    setIsOpen(showModal);
+  }, [showModal])
+
+  const [updateEvent] = useMutation (UPDATE_EVENT)
+  // const [removeEvent]= useMutation (REMOVE_EVENT)
+
+  const [eventData, setEventData] = useState({ title: '', start: '', end: '', description: '', location: '', allDay: false, color: ''});
+
+  useEffect(() => {
+    setEventData({...eventData})
+  }, [])
+  console.log(eventData);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -19,8 +31,10 @@ const eventDetail = ({onEventDetail}) =>
     try {
     const response = await updateEvent({ variables: eventData});
     console.log('response: ', response);
-
-    const response = await removeEvent({ variables: _id: eventId});
+    setEventData({ title: '', start: '', end: '', description: '', location: '', allDay: false, color: '' });
+    setIsOpen(false);
+    onEventDetail(response.data.updateEvent);
+    // const response = await removeEvent({ variables: _id: eventId});
     } catch (error) {
       console.log(error);
     }
@@ -30,11 +44,11 @@ const eventDetail = ({onEventDetail}) =>
   return (
     <> 
       <div>
-      onClick={handleSelectEvent}
+      onClick={toggleModal}
       </div>
       <Modal
         isOpen={isOpen}
-        onRequestClose={handleCloseModal}
+        onRequestClose={onClose}
         className="z-50 fixed inset-0 overflow-auto bg-opacity-80 bg-gray-900 flex justify-center items-center"
         overlayClassName="z-40 fixed inset-0 bg-gray-800 bg-opacity-75"
       >
@@ -85,6 +99,17 @@ const eventDetail = ({onEventDetail}) =>
               className="border border-gray-400 rounded-lg py-2 px-4"
             />
           </div>
+          <div className="form-group">
+            <label>Color</label>
+            <select name="color" value={eventData.color} onChange={handleInputChange}>
+              <option value="">Select a color</option>
+              <option value="lightblue">Light Blue</option>
+              <option value="lightgreen">Light Green</option>
+              <option value="lightpink">Light Pink</option>
+              <option value="lightyellow">Light Yellow</option>
+              <option value="lightcoral">Light Coral</option>
+            </select>
+          </div>
           <div className="mt-6 flex justify-end">
             <button
               className="bg-blue-400 hover:bg-gray-500 text-white font-semibold rounded-lg py-2 px-6"
@@ -102,12 +127,13 @@ const eventDetail = ({onEventDetail}) =>
         </div>
         <button
           className="bg-red-400 hover:bg-gray-500 text-white font-semibold rounded-lg py-2 px-6"
-          onClick={handleCloseModal}
+          onClick={toggleModal}
         >
+          ✗
         </button>
     </Modal>
   </>
   );
 };
 
-export default createEventDetail;
+export default EventDetail;

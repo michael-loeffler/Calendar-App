@@ -70,12 +70,14 @@ function CalendarContainer({ ...props }) {
         }, []
     );
 
-    const handleSelectEvent = useCallback(
-        (event) => window.alert(event.title),
-        // setShowModal(true);
-        // // trigger EventDetails modal (haven't discussed yet)
-        // []
-    );
+    const handleSelectEvent = (event)=> {
+          const {... eventData} = event.target;
+          const handleEventDetail = () => {
+            EventDetail();
+        }}    
+           ShowModal(true);
+       []
+    };
 
     const handleCreateEvent = (event) => {
         // setEvents([...events, event]);
@@ -88,7 +90,7 @@ function CalendarContainer({ ...props }) {
 
     const toggleModal = () => {
         setShowModal(!showModal)
-      }    
+      };   
 
     return (
         <div className="mt-2" {...props}>
@@ -100,13 +102,11 @@ function CalendarContainer({ ...props }) {
                 start={start}
                 end={end}
             />
-            {/* <EventDetail
-                onEventDetail={handleEventDetail}
-                showModal={showModal}
-                // onClose={handleClose}
-                // start={start}
-                // end={end}
-            /> */}
+            <EventDetail
+              onEventDetail={handleEventDetail}
+              showModal={showModal}
+              events={events}
+            />
             {/* {loading ? (
                 <div>Loading...</div>
             ) : ( */}
