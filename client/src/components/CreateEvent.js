@@ -1,36 +1,37 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useMutation } from '@apollo/client'
 import { ADD_EVENT } from '../utils/mutations'
 import Modal from 'react-modal';
 
 Modal.setAppElement('#root');
 
-const CreateEvent = ({start, end, onCreateEvent}) => {
-  const [isOpen, setIsOpen] = useState(false);
+const CreateEvent = ({start, end, onCreateEvent, showModal, onClose, toggleModal}) => {
+  const [isOpen, setIsOpen] = useState(showModal);
+  console.log(start, end)
+
+  useEffect(() => {
+      setIsOpen(showModal);
+  }, [showModal])
+
   const [addEvent] = useMutation(ADD_EVENT)
-  // const [title, setTitle] = useState('');
-  // const [start, setStart] = useState('');
-  // const [end, setEnd] = useState('');
-  const [eventData, setEventData] = useState({title: '', start: start || '', end: end || '', description: '', location: '', allDay: false, color: ''})
+  
+  const [eventData, setEventData] = useState({title: '', start: start || '', end: end || '', description: '', location: '', allDay: false, color: ''});
+  
+  useEffect(() => {
+    setEventData({...eventData, start: start, end: end})
+  }, [start, end])
+  console.log(eventData);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setEventData({ ...eventData, [name]: value});
   };
 
-  const handleOpenModal = () => {
-    setIsOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsOpen(false);
-  };
- 
   const handleCreateEvent = async () => {
     try {
       const response = await addEvent({ variables: eventData });   
       console.log('response: ', response);
-      setEventData({ title: '', start: '', end: '', description: '', location: '', allDay: '', color: '' });
+      setEventData({ title: '', start: '', end: '', description: '', location: '', allDay: false, color: '' });
       setIsOpen(false);
       onCreateEvent(response.data.addEvent);
     } catch (error) {
@@ -42,13 +43,13 @@ const CreateEvent = ({start, end, onCreateEvent}) => {
     <>
       <button
         className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline mb-2"
-        onClick={handleOpenModal}
+        onClick={toggleModal}
       >
         Create Event
       </button>
       <Modal
         isOpen={isOpen}
-        onRequestClose={handleCloseModal}
+        onRequestClose={onClose}
         className="z-50 fixed inset-0 overflow-auto bg-opacity-80 bg-gray-900 flex justify-center items-center"
         overlayClassName="z-40 fixed inset-0 bg-gray-800 bg-opacity-75"
       >
@@ -119,7 +120,7 @@ const CreateEvent = ({start, end, onCreateEvent}) => {
             </button>
             <button
               className="bg-gray-400 hover:bg-gray-500 text-white font-semibold rounded-lg py-2 px-6"
-              onClick={handleCloseModal}
+              onClick={toggleModal}
             >
               Cancel
             </button>
