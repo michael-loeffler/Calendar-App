@@ -32,7 +32,7 @@ const CreateEvent = ({start, end, onCreateEvent}) => {
       console.log('response: ', response);
       setEventData({ title: '', start: '', end: '', description: '', location: '', allDay: '', color: '' });
       setIsOpen(false);
-      onCreateEvent({ ...response.data.addEvent});
+      onCreateEvent({response.data.addEvent});
     } catch (error) {
       console.error(error);
     }
