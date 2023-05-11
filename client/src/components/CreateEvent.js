@@ -5,37 +5,31 @@ import Modal from 'react-modal';
 
 Modal.setAppElement('#root');
 
-const CreateEvent = ({start, end, onCreateEvent, showModal, onClose}) => {
-  const [isOpen, setIsOpen] = useState();
-  useEffect(() => {
-    if (showModal) {
-      setIsOpen(true);
-    }
-  }, [showModal])
-  const [addEvent] = useMutation(ADD_EVENT)
+const CreateEvent = ({start, end, onCreateEvent, showModal, onClose, toggleModal}) => {
+  const [isOpen, setIsOpen] = useState(showModal);
+  console.log(start, end)
 
-  const [eventData, setEventData] = useState({title: '', start: start || '', end: end || '', description: '', location: '', allDay: false})
+  useEffect(() => {
+      setIsOpen(showModal);
+  }, [showModal])
+
+  const [addEvent] = useMutation(ADD_EVENT)
+  
+  const [eventData, setEventData] = useState({title: '', start: start || '', end: end || '', description: '', location: '', allDay: false});
+  
+  useEffect(() => {
+    setEventData({...eventData, start: start, end: end})
+  }, [start, end])
+  console.log(eventData);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setEventData({ ...eventData, [name]: value});
   };
 
-  // const handleOpenModal = () => {
-  //   setIsOpen(true);
-  // };
-
-  // const handleCloseModal = () => {
-  //   setIsOpen(false);
-  // };
-
-  const toggleModal = () => {
-    setIsOpen(!showModal)
-  }
- 
   const handleCreateEvent = async () => {
     try {
-    const response = await addEvent({ variables: eventData});   
+    const response = await addEvent({ variables: eventData });   
     console.log('response: ', response);
     setEventData({title: '', start: '', end: '', description: '', location: '', allDay: false});
     setIsOpen(false);

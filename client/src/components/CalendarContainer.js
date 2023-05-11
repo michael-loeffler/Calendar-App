@@ -54,11 +54,20 @@ function CalendarContainer({ ...props }) {
 
     const handleSelectSlot = useCallback(
         ({ start, end }) => {
+                const formatDate = (date) => {
+                  const dateAndTime = date.toISOString().split('T');
+                  const time = dateAndTime[1].split(':');
+                  
+                  return dateAndTime[0]+'T'+time[0]+':'+time[1];
+                }
+                start = formatDate(start);
+                end = formatDate(end);
+                console.log(start, end);
             setStart(start);
             setEnd(end);
             setShowModal(true);
             // trigger NewEventForm modal and pre-populate start and end time
-        }, [setStart, setEnd]
+        }, []
     );
 
     const handleSelectEvent = useCallback(
@@ -76,12 +85,17 @@ function CalendarContainer({ ...props }) {
         setShowModal(false);
     };
 
+    const toggleModal = () => {
+        setShowModal(!showModal)
+      }    
+
     return (
         <div className="mt-2" {...props}>
             <CreateEvent
                 onCreateEvent={handleCreateEvent}
                 showModal={showModal}
                 onClose={handleClose}
+                toggleModal={toggleModal}
                 start={start}
                 end={end}
             />
