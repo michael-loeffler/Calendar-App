@@ -55,7 +55,7 @@ export const REMOVE_EVENT = gql`
 `;
 
 export const UPDATE_EVENT = gql`
-  mutation updateEvent($title: String!, $start: Date!, $end: Date!, $location: String, $description: String, $allDay: Boolean, $color: Strin) {
+  mutation updateEvent($title: String!, $start: Date!, $end: Date!, $location: String, $description: String, $allDay: Boolean, $color: String) {
     updateEvent(title: $title, start: $start, end: $end, location: $location, description: $description, allDay: $allDay, color: $color) {
       _id
       title
