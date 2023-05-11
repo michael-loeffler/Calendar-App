@@ -7,7 +7,6 @@ Modal.setAppElement('#root');
 
 const CreateEvent = ({start, end, onCreateEvent, showModal, onClose, toggleModal}) => {
   const [isOpen, setIsOpen] = useState(showModal);
-  console.log(start, end)
 
   useEffect(() => {
       setIsOpen(showModal);
@@ -20,7 +19,6 @@ const CreateEvent = ({start, end, onCreateEvent, showModal, onClose, toggleModal
   useEffect(() => {
     setEventData({...eventData, start: start, end: end})
   }, [start, end])
-  console.log(eventData);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -38,6 +36,10 @@ const CreateEvent = ({start, end, onCreateEvent, showModal, onClose, toggleModal
       console.error(error);
     }
   };
+
+  const clearForm = () => {
+    setEventData({ title: '', start: '', end: '', description: '', location: '', allDay: false, color: '' });
+  }
 
   return (
     <>
@@ -120,7 +122,10 @@ const CreateEvent = ({start, end, onCreateEvent, showModal, onClose, toggleModal
             </button>
             <button
               className="bg-gray-400 hover:bg-gray-500 text-white font-semibold rounded-lg py-2 px-6"
-              onClick={toggleModal}
+              onClick={() => {
+                toggleModal();
+                clearForm();
+              }}
             >
               Cancel
             </button>
