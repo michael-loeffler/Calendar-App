@@ -3,6 +3,7 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { Calendar, Views, dayjsLocalizer } from 'react-big-calendar';
 import dayjs from 'dayjs';
 import timezone from 'dayjs/plugin/timezone';
+import advancedFormat from 'dayjs/plugin/advancedFormat'
 import CreateEvent from './CreateEvent';
 // import EventDetails from './EventDetails';
 // import seedEvents from './components/SeedEvents';
@@ -11,27 +12,44 @@ import { useQuery } from "@apollo/client";
 import { QUERY_EVENTS } from '../utils/queries';
 const email = 'michael@test.com'
 dayjs.extend(timezone);
+dayjs.extend(advancedFormat);
 const localizer = dayjsLocalizer(dayjs);
 
 const ColoredDateCellWrapper = ({ children }) =>
     React.cloneElement(React.Children.only(children), {
         style: {
-            backgroundColor: 'lightblue',
-            cursor: 'pointer',
+            backgroundColor: 'white',
         },
     });
 
 function CalendarContainer({ ...props }) {
-    const { components, max, views, formats } = useMemo(
+    const { components, views, formats } = useMemo(
         () => ({
             components: {
                 timeSlotWrapper: ColoredDateCellWrapper,
             },
-            max: dayjs().endOf('day').subtract(1, 'hours').toDate(),
             views: Object.keys(Views).map((k) => Views[k]),
             formats: {
                 dateFormat: (date, culture, localizer) =>
                     localizer.format(date, 'D', culture),
+                dayFormat: (date, culture, localizer) =>
+                    localizer.format(date, 'ddd M/DD', culture),
+                dayHeaderFormat: (date, culture, localizer) =>
+                    localizer.format(date, 'dddd, MMMM Do', culture),
+                dayRangeHeaderFormat: ({ start, end }, culture, localizer) =>
+                    localizer.format(start, 'MMMM Do', culture) +
+                    ' - ' +
+                    localizer.format(end, 'Do', culture),
+                eventTimeRangeFormat: ({ start, end }, culture, localizer) =>
+                    localizer.format(start, 'h:mm a', culture) +
+                    ' - ' +
+                    localizer.format(end, 'h:mm a', culture),
+                selectRangeFormat: ({ start, end }, culture, localizer) =>
+                    localizer.format(start, 'h:mm a', culture) +
+                    ' - ' +
+                    localizer.format(end, 'h:mm a', culture),
+                timeGutterFormat: (date, culture, localizer) =>
+                    localizer.format(date, 'h:mm a', culture),
             },
         }),
         []
@@ -57,12 +75,17 @@ function CalendarContainer({ ...props }) {
                 const formatDate = (date) => {
                   const dateAndTime = date.toISOString().split('T');
                   const time = dateAndTime[1].split(':');
-                  
+                  if (time[0] <= 14) {
+                    time[0] = `0${(time[0] - 5).toString()}`;
+                  } else if (time[0] === 'late night case') {
+                    // need to figure out threshold and also how to adjust date as well
+                  } else {
+                    time[0] = (time[0] - 5).toString();
+                  }
                   return dateAndTime[0]+'T'+time[0]+':'+time[1];
                 }
-                start = formatDate(start);
-                end = formatDate(end);
-                console.log(start, end);
+            start = formatDate(start);
+            end = formatDate(end);
             setStart(start);
             setEnd(end);
             setShowModal(true);
@@ -105,7 +128,6 @@ function CalendarContainer({ ...props }) {
                 <Calendar
                     localizer={localizer}
                     components={components}
-                    max={max}
                     views={views}
                     formats={formats}
                     events={events}
@@ -113,6 +135,8 @@ function CalendarContainer({ ...props }) {
                     selectable
                     onSelectEvent={handleSelectEvent}
                     onSelectSlot={handleSelectSlot}
+                    step={15}
+                    timeslots={4}
                 />
         </div>
     )
