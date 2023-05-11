@@ -7,7 +7,7 @@ import CreateEvent from './CreateEvent';
 // import EventDetails from './EventDetails';
 // import seedEvents from './components/SeedEvents';
 import '../index.css';
-import { useQuery } from "@apollo/react-hooks";
+import { useQuery } from "@apollo/client";
 import { QUERY_EVENTS } from '../utils/queries';
 const email = 'michael@test.com'
 dayjs.extend(timezone);
@@ -37,7 +37,7 @@ function CalendarContainer({ ...props }) {
         []
     );
 
-    const [events, setEvents] = useState();
+    const [events, setEvents] = useState([]);
     const { data } = useQuery(QUERY_EVENTS, {
         variables: { email: email },
     });
@@ -47,17 +47,16 @@ function CalendarContainer({ ...props }) {
             setEvents(data.getEvents.events)
         }
     }, [data])
+
     const [start, setStart] = useState();
     const [end, setEnd] = useState();
     const [showModal, setShowModal] = useState();
 
     const handleSelectSlot = useCallback(
         ({ start, end }) => {
-            console.log(start, end)
             setStart(start);
             setEnd(end);
             setShowModal(true);
-
             // trigger NewEventForm modal and pre-populate start and end time
         }, [setStart, setEnd]
     );
