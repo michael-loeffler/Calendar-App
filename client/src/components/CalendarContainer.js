@@ -57,12 +57,17 @@ function CalendarContainer({ ...props }) {
                 const formatDate = (date) => {
                   const dateAndTime = date.toISOString().split('T');
                   const time = dateAndTime[1].split(':');
-                  
+                  if (time[0] <= 14) {
+                    time[0] = `0${(time[0] - 5).toString()}`;
+                  } else if (time[0] === 'late night case') {
+                    // need to figure out threshold and also how to adjust date as well
+                  } else {
+                    time[0] = (time[0] - 5).toString();
+                  }
                   return dateAndTime[0]+'T'+time[0]+':'+time[1];
                 }
-                start = formatDate(start);
-                end = formatDate(end);
-                console.log(start, end);
+            start = formatDate(start);
+            end = formatDate(end);
             setStart(start);
             setEnd(end);
             setShowModal(true);
