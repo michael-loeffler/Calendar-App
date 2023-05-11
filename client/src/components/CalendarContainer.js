@@ -4,10 +4,10 @@ import { Calendar, Views, dayjsLocalizer } from 'react-big-calendar';
 import dayjs from 'dayjs';
 import timezone from 'dayjs/plugin/timezone';
 import CreateEvent from './CreateEvent';
-// import EventDetails from './EventDetails';
+import EventDetails from './EventDetails';
 // import seedEvents from './components/SeedEvents';
 import '../index.css';
-import { useQuery } from "@apollo/react-hooks";
+import { useQuery } from "@apollo/client";
 import { QUERY_EVENTS } from '../utils/queries';
 const email = 'michael@test.com'
 dayjs.extend(timezone);
@@ -64,8 +64,9 @@ function CalendarContainer({ ...props }) {
 
     const handleSelectEvent = useCallback(
         (event) => window.alert(event.title),
-        // trigger EventDetails modal (haven't discussed yet)
-        []
+        // setShowModal(true);
+        // // trigger EventDetails modal (haven't discussed yet)
+        // []
     );
 
     const handleCreateEvent = (event) => {
@@ -86,6 +87,13 @@ function CalendarContainer({ ...props }) {
                 start={start}
                 end={end}
             />
+            {/* <EventDetail
+                onEventDetail={handleEventDetail}
+                showModal={showModal}
+                // onClose={handleClose}
+                // start={start}
+                // end={end}
+            /> */}
             {/* {loading ? (
                 <div>Loading...</div>
             ) : ( */}
