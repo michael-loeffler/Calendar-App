@@ -6,7 +6,7 @@ import timezone from 'dayjs/plugin/timezone';
 import advancedFormat from 'dayjs/plugin/advancedFormat';
 import utc from 'dayjs/plugin/utc';
 import CreateEvent from './CreateEvent';
-// import EventDetails from './EventDetails';
+import EventDetails from './EventDetails';
 // import seedEvents from './components/SeedEvents';
 import '../index.css';
 import { useQuery } from "@apollo/client";
@@ -79,6 +79,9 @@ function CalendarContainer({ ...props }) {
     const [start, setStart] = useState();
     const [end, setEnd] = useState();
     const [showModal, setShowModal] = useState();
+    const [selectedEvent, setSelectedEvent] = useState();
+    const [showDetails, setShowDetails] =useState();
+    const [eventUpdate, setEventUpdate] = useState();
 
     const handleSelectSlot = useCallback(
         ({ start, end }) => {
@@ -94,14 +97,21 @@ function CalendarContainer({ ...props }) {
     );
 
     const handleSelectEvent = useCallback(
-        (event) => window.alert(event.title),
-        // trigger EventDetails modal (haven't discussed yet)
-        []
+         ({event}) => {
+            setSelectedEvent(event)
+            setShowDetails(true);
+        }, [] 
     );
 
     const handleCreateEvent = (event) => {
         // setEvents([...events, event]);
         setShowModal(false);
+    };
+
+    const handleUpdateEvent = (event) => {
+        setEventUpdate(event);
+        setShowDetails(false);
+        setShowModal(true);
     };
 
     const handleClose = () => {
@@ -110,10 +120,14 @@ function CalendarContainer({ ...props }) {
 
     const toggleModal = () => {
         setShowModal(!showModal)
-    };
+    };   
 
-    return (
-        <div className="mt-2" {...props}>
+    const toggleDetails = () => {
+        setShowDetails(!showDetails)
+    };  
+
+        return (
+          <div className="mt-2" {...props}>
             <CreateEvent
                 onCreateEvent={handleCreateEvent}
                 showModal={showModal}
@@ -121,6 +135,14 @@ function CalendarContainer({ ...props }) {
                 toggleModal={toggleModal}
                 start={start}
                 end={end}
+                eventUpdate={eventUpdate}
+            />
+            <EventDetails
+            //   onEventDetail={handleEventDetail}
+              showDetails={showDetails}
+              toggleDetails={toggleDetails}
+              selectedEvent={selectedEvent}
+              handleUpdateEvent={handleUpdateEvent}
             />
             <Calendar
                 localizer={localizer}

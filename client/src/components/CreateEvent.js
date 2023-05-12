@@ -5,7 +5,7 @@ import Modal from 'react-modal';
 
 Modal.setAppElement('#root');
 
-const CreateEvent = ({start, end, onCreateEvent, showModal, onClose, toggleModal}) => {
+const CreateEvent = ({start, end, onCreateEvent, showModal, onClose, toggleModal, eventUpdate}) => {
   const [isOpen, setIsOpen] = useState(showModal);
 
   useEffect(() => {
@@ -15,7 +15,8 @@ const CreateEvent = ({start, end, onCreateEvent, showModal, onClose, toggleModal
   const [addEvent] = useMutation(ADD_EVENT)
   
   const [eventData, setEventData] = useState({title: '', start: start || '', end: end || '', description: '', location: '', allDay: false, color: ''});
-  
+  //eventUpdate  
+
   useEffect(() => {
     setEventData({...eventData, start: start, end: end})
   }, [start, end])
