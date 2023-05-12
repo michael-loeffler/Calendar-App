@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
 
-import { createUser } from '../utils/API';
+import { ADD_USER } from '../utils/mutations';
 import Auth from '../utils/auth';
 
 const SignupForm = () => {
   // set initial form state
-  const [userFormData, setUserFormData] = useState({ firstName: '', email: '', password: '' });
+  const [userFormData, setUserFormData] = useState({ firstName: '', lastName: '', email: '', password: '' });
   // set state for form validation
   const [validated] = useState(false);
   // set state for alert
@@ -28,13 +28,10 @@ const SignupForm = () => {
     }
 
     try {
-      const response = await createUser(userFormData);
+      const response = await addUser({ variables: userFormData });
+      console.log('response: ', response);
 
-      if (!response.ok) {
-        throw new Error('something went wrong!');
-      }
-
-      const { token, user } = await response.json();
+      const { token, user } = await response.data.addUser
       console.log(user);
       Auth.login(token);
     } catch (err) {
@@ -69,7 +66,10 @@ const SignupForm = () => {
             required
           />
 
-          <Form.Group className='mb-3'>
+          <Form.Control.Feedback type='invalid'>First Name is required!</Form.Control.Feedback>
+        </Form.Group>
+
+        <Form.Group className='mb-3'>
           <Form.Label htmlFor='lastName'>Last Name</Form.Label>
           <Form.Control
             type='text'
@@ -80,8 +80,7 @@ const SignupForm = () => {
             required
           /> 
 
-
-          <Form.Control.Feedback type='invalid'>First Name is required!</Form.Control.Feedback>
+          <Form.Control.Feedback type='invalid'>Last Name is required!</Form.Control.Feedback>
         </Form.Group>
 
         <Form.Group className='mb-3'>
@@ -110,7 +109,7 @@ const SignupForm = () => {
           <Form.Control.Feedback type='invalid'>Password is required!</Form.Control.Feedback>
         </Form.Group>
         <Button
-          disabled={!(userFormData.firstName && userFormData.email && userFormData.password)}
+          disabled={!(userFormData.firstName && userFormData.lastName && userFormData.email && userFormData.password)}
           type='submit'
           variant='success'>
           Submit
