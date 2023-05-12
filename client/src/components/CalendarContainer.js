@@ -3,7 +3,8 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { Calendar, Views, dayjsLocalizer } from 'react-big-calendar';
 import dayjs from 'dayjs';
 import timezone from 'dayjs/plugin/timezone';
-import advancedFormat from 'dayjs/plugin/advancedFormat'
+import advancedFormat from 'dayjs/plugin/advancedFormat';
+import utc from 'dayjs/plugin/utc';
 import CreateEvent from './CreateEvent';
 // import EventDetails from './EventDetails';
 // import seedEvents from './components/SeedEvents';
@@ -13,6 +14,7 @@ import { QUERY_EVENTS } from '../utils/queries';
 const email = 'michael@test.com'
 dayjs.extend(timezone);
 dayjs.extend(advancedFormat);
+dayjs.extend(utc);
 const localizer = dayjsLocalizer(dayjs);
 
 const ColoredDateCellWrapper = ({ children }) =>
@@ -72,20 +74,10 @@ function CalendarContainer({ ...props }) {
 
     const handleSelectSlot = useCallback(
         ({ start, end }) => {
-                const formatDate = (date) => {
-                  const dateAndTime = date.toISOString().split('T');
-                  const time = dateAndTime[1].split(':');
-                  if (time[0] <= 14) {
-                    time[0] = `0${(time[0] - 5).toString()}`;
-                  } else if (time[0] === 'late night case') {
-                    // need to figure out threshold and also how to adjust date as well
-                  } else {
-                    time[0] = (time[0] - 5).toString();
-                  }
-                  return dateAndTime[0]+'T'+time[0]+':'+time[1];
-                }
+            const formatDate = (date) => dayjs.utc(date).local().format().slice(0, 19)
             start = formatDate(start);
             end = formatDate(end);
+            console.log(end);
             setStart(start);
             setEnd(end);
             setShowModal(true);
@@ -110,7 +102,7 @@ function CalendarContainer({ ...props }) {
 
     const toggleModal = () => {
         setShowModal(!showModal)
-      }    
+    };
 
     return (
         <div className="mt-2" {...props}>
@@ -122,22 +114,19 @@ function CalendarContainer({ ...props }) {
                 start={start}
                 end={end}
             />
-            {/* {loading ? (
-                <div>Loading...</div>
-            ) : ( */}
-                <Calendar
-                    localizer={localizer}
-                    components={components}
-                    views={views}
-                    formats={formats}
-                    events={events}
-                    style={{ height: 800 }}
-                    selectable
-                    onSelectEvent={handleSelectEvent}
-                    onSelectSlot={handleSelectSlot}
-                    step={15}
-                    timeslots={4}
-                />
+            <Calendar
+                localizer={localizer}
+                components={components}
+                views={views}
+                formats={formats}
+                events={events}
+                style={{ height: 800 }}
+                selectable
+                onSelectEvent={handleSelectEvent}
+                onSelectSlot={handleSelectSlot}
+                step={15}
+                timeslots={4}
+            />
         </div>
     )
 }
