@@ -11,6 +11,7 @@ import EventDetails from './EventDetails';
 import '../index.css';
 import { useQuery } from "@apollo/client";
 import { QUERY_EVENTS } from '../utils/queries';
+import Auth from '../utils/auth';
 const email = 'michael@test.com'
 dayjs.extend(timezone);
 dayjs.extend(advancedFormat);
@@ -57,6 +58,18 @@ function CalendarContainer({ ...props }) {
         []
     );
 
+    // let email = '';
+    // // const user = Auth.getProfile()
+    // // console.log(user.data.email);
+    // // if (user) {
+    // //     email = user.data.email;
+    // // }
+
+    // if (Auth.loggedIn) {
+    //     const user = Auth.getProfile()
+    //     email = user.data.email;
+    // }
+    
     const [events, setEvents] = useState([]);
     const { data } = useQuery(QUERY_EVENTS, {
         variables: { email: email },
@@ -149,6 +162,7 @@ function CalendarContainer({ ...props }) {
                 step={15}
                 timeslots={4}
                 startAccessor={(event) => {return new Date(event.start)}}
+                endAccessor={(event) => {return new Date(event.end)}}
             />
         </div>
     )

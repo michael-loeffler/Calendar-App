@@ -11,12 +11,12 @@ const resolvers = {
   },
 
   Mutation: {
-    signup: async (parent, args) => {
+    addUser: async (parent, args) => {
       const user = await User.create(args);
       const token = signToken(user);
       return { token, user };
     },
-    login: async (parent, { email, password }) => {
+    loginUser: async (parent, { email, password }) => {
       const user = await User.findOne({ email });
 
       if (!user) {
@@ -32,17 +32,17 @@ const resolvers = {
       const token = signToken(user);
       return { token, user };
     },
-    addEvent: async (parent, args) => {
-      // if (context.user) {
+    addEvent: async (parent, args, context) => {
+      if (context.user) {
         const event = await Event.create(args);
 
-        // await User.findOneAndUpdate(
-        //   { _id: context.user._id },
-        //   { $addToSet: { events: event._id } }
-        // );
+        await User.findOneAndUpdate(
+          { _id: context.user._id },
+          { $addToSet: { events: event._id } }
+        );
 
         return event;
-      // }
+      }
       throw new AuthenticationError('You need to be logged in!');
     },
     removeEvent: async (parent, { eventId }, context) => {
