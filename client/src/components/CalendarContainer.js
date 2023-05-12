@@ -66,7 +66,7 @@ function CalendarContainer({ ...props }) {
     }
 
     const [events, setEvents] = useState([]);
-    const { data } = useQuery(QUERY_EVENTS, {
+    const { data, refetch } = useQuery(QUERY_EVENTS, {
         variables: { email: email },
     });
 
@@ -79,13 +79,13 @@ function CalendarContainer({ ...props }) {
     const [start, setStart] = useState();
     const [end, setEnd] = useState();
     const [showModal, setShowModal] = useState();
-    const [selectedEvent, setSelectedEvent] = useState();
+    const [selectedEvent, setSelectedEvent] = useState({});
     const [showDetails, setShowDetails] =useState();
     const [eventUpdate, setEventUpdate] = useState();
+    const formatDate = (date) => dayjs.utc(date).local().format().slice(0, 19)
 
     const handleSelectSlot = useCallback(
         ({ start, end }) => {
-            const formatDate = (date) => dayjs.utc(date).local().format().slice(0, 19)
             start = formatDate(start);
             end = formatDate(end);
             console.log(end);
@@ -97,14 +97,14 @@ function CalendarContainer({ ...props }) {
     );
 
     const handleSelectEvent = useCallback(
-         ({event}) => {
+         (event) => {
             setSelectedEvent(event)
             setShowDetails(true);
         }, [] 
     );
 
     const handleCreateEvent = (event) => {
-        // setEvents([...events, event]);
+        refetch()
         setShowModal(false);
     };
 
@@ -143,6 +143,8 @@ function CalendarContainer({ ...props }) {
               toggleDetails={toggleDetails}
               selectedEvent={selectedEvent}
               handleUpdateEvent={handleUpdateEvent}
+              formatDate={formatDate}
+              refetch={refetch}
             />
             <Calendar
                 localizer={localizer}
