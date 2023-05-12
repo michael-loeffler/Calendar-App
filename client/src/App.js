@@ -3,7 +3,8 @@ import { ApolloProvider, ApolloClient, InMemoryCache, createHttpLink } from '@ap
 import { setContext } from '@apollo/client/link/context';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import './index.css';
-import CalendarContainer from "./components/CalendarContainer";
+import Navbar from './components/Navbar'
+import CalendarContainer from './components/CalendarContainer';
 
 // Construct our main GraphQL API endpoint
 const httpLink = createHttpLink({
@@ -32,6 +33,7 @@ const client = new ApolloClient({
 function App() {
   return (
     <ApolloProvider client={client}>
+      <Navbar></Navbar>
       <CalendarContainer></CalendarContainer>
     </ApolloProvider>
   );

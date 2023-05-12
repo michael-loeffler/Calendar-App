@@ -6,12 +6,13 @@ import timezone from 'dayjs/plugin/timezone';
 import advancedFormat from 'dayjs/plugin/advancedFormat';
 import utc from 'dayjs/plugin/utc';
 import CreateEvent from './CreateEvent';
-// import EventDetails from './EventDetails';
+import EventDetails from './EventDetails';
 // import seedEvents from './components/SeedEvents';
 import '../index.css';
 import { useQuery } from "@apollo/client";
 import { QUERY_EVENTS } from '../utils/queries';
-const email = 'michael@test.com'
+import Auth from '../utils/auth';
+
 dayjs.extend(timezone);
 dayjs.extend(advancedFormat);
 dayjs.extend(utc);
@@ -57,8 +58,15 @@ function CalendarContainer({ ...props }) {
         []
     );
 
+    let email = '';
+
+    if (Auth.loggedIn()) {
+        const user = Auth.getProfile()
+        email = user.data.email;
+    }
+
     const [events, setEvents] = useState([]);
-    const { data } = useQuery(QUERY_EVENTS, {
+    const { data, refetch } = useQuery(QUERY_EVENTS, {
         variables: { email: email },
     });
 
@@ -71,10 +79,13 @@ function CalendarContainer({ ...props }) {
     const [start, setStart] = useState();
     const [end, setEnd] = useState();
     const [showModal, setShowModal] = useState();
+    const [selectedEvent, setSelectedEvent] = useState({});
+    const [showDetails, setShowDetails] =useState();
+    const [eventUpdate, setEventUpdate] = useState();
+    const formatDate = (date) => dayjs.utc(date).local().format().slice(0, 19)
 
     const handleSelectSlot = useCallback(
         ({ start, end }) => {
-            const formatDate = (date) => dayjs.utc(date).local().format().slice(0, 19)
             start = formatDate(start);
             end = formatDate(end);
             console.log(end);
@@ -86,14 +97,21 @@ function CalendarContainer({ ...props }) {
     );
 
     const handleSelectEvent = useCallback(
-        (event) => window.alert(event.title),
-        // trigger EventDetails modal (haven't discussed yet)
-        []
+         (event) => {
+            setSelectedEvent(event)
+            setShowDetails(true);
+        }, [] 
     );
 
     const handleCreateEvent = (event) => {
-        // setEvents([...events, event]);
+        refetch()
         setShowModal(false);
+    };
+
+    const handleUpdateEvent = (event) => {
+        setEventUpdate(event);
+        setShowDetails(false);
+        setShowModal(true);
     };
 
     const handleClose = () => {
@@ -102,10 +120,14 @@ function CalendarContainer({ ...props }) {
 
     const toggleModal = () => {
         setShowModal(!showModal)
-    };
+    };   
 
-    return (
-        <div className="mt-2" {...props}>
+    const toggleDetails = () => {
+        setShowDetails(!showDetails)
+    };  
+
+        return (
+          <div className="mt-2" {...props}>
             <CreateEvent
                 onCreateEvent={handleCreateEvent}
                 showModal={showModal}
@@ -113,6 +135,16 @@ function CalendarContainer({ ...props }) {
                 toggleModal={toggleModal}
                 start={start}
                 end={end}
+                eventUpdate={eventUpdate}
+            />
+            <EventDetails
+            //   onEventDetail={handleEventDetail}
+              showDetails={showDetails}
+              toggleDetails={toggleDetails}
+              selectedEvent={selectedEvent}
+              handleUpdateEvent={handleUpdateEvent}
+              formatDate={formatDate}
+              refetch={refetch}
             />
             <Calendar
                 localizer={localizer}
@@ -127,6 +159,7 @@ function CalendarContainer({ ...props }) {
                 step={15}
                 timeslots={4}
                 startAccessor={(event) => {return new Date(event.start)}}
+                endAccessor={(event) => {return new Date(event.end)}}
             />
         </div>
     )

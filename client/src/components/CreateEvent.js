@@ -5,13 +5,21 @@ import Modal from 'react-modal';
 
 Modal.setAppElement('#root');
 
-const CreateEvent = ({start, end, onCreateEvent}) => {
-  const [isOpen, setIsOpen] = useState(false);
+const CreateEvent = ({start, end, onCreateEvent, showModal, onClose, toggleModal, eventUpdate}) => {
+  const [isOpen, setIsOpen] = useState(showModal);
+
+  useEffect(() => {
+      setIsOpen(showModal);
+  }, [showModal])
+
   const [addEvent] = useMutation(ADD_EVENT)
-  // const [title, setTitle] = useState('');
-  // const [start, setStart] = useState('');
-  // const [end, setEnd] = useState('');
-  const [eventData, setEventData] = useState({title: '', start: start || '', end: end || '', description: '', location: '', allDay: false, color: ''})
+  
+  const [eventData, setEventData] = useState({title: '', start: start || '', end: end || '', description: '', location: '', allDay: false, color: ''});
+  //eventUpdate  
+
+  useEffect(() => {
+    setEventData({...eventData, start: start, end: end})
+  }, [start, end])
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
