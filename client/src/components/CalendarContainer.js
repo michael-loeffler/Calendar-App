@@ -69,6 +69,9 @@ function CalendarContainer({ ...props }) {
     const [start, setStart] = useState();
     const [end, setEnd] = useState();
     const [showModal, setShowModal] = useState();
+    const [selectedEvent, setSelectedEvent] = useState();
+    const [showDetails, setShowDetails] =useState();
+    const [eventUpdate, setEventUpdate] = useState();
 
     const handleSelectSlot = useCallback(
         ({ start, end }) => {
@@ -93,18 +96,22 @@ function CalendarContainer({ ...props }) {
         }, []
     );
 
-    const handleSelectEvent = (event)=> {
-          const {... eventData} = event.target;
-          const handleEventDetail = () => {
-            EventDetail();
-        }}    
-           ShowModal(true);
-       []
-    };
+    const handleSelectEvent = useCallback(
+         ({event}) => {
+            setSelectedEvent(event)
+            setShowDetails(true);
+        }, [] 
+    );
 
     const handleCreateEvent = (event) => {
         // setEvents([...events, event]);
         setShowModal(false);
+    };
+
+    const handleUpdateEvent = (event) => {
+        setEventUpdate(event);
+        setShowDetails(false);
+        setShowModal(true);
     };
 
     const handleClose = () => {
@@ -113,10 +120,14 @@ function CalendarContainer({ ...props }) {
 
     const toggleModal = () => {
         setShowModal(!showModal)
-      };   
+    };   
 
-    return (
-        <div className="mt-2" {...props}>
+    const toggleDetails = () => {
+        setShowDetails(!showDetails)
+    };  
+
+        return (
+          <div className="mt-2" {...props}>
             <CreateEvent
                 onCreateEvent={handleCreateEvent}
                 showModal={showModal}
@@ -124,11 +135,14 @@ function CalendarContainer({ ...props }) {
                 toggleModal={toggleModal}
                 start={start}
                 end={end}
+                eventUpdate={eventUpdate}
             />
-            <EventDetail
-              onEventDetail={handleEventDetail}
-              showModal={showModal}
-              events={events}
+            <EventDetails
+            //   onEventDetail={handleEventDetail}
+              showDetails={showDetails}
+              toggleDetails={toggleDetails}
+              selectedEvent={selectedEvent}
+              handleUpdateEvent={handleUpdateEvent}
             />
             {/* {loading ? (
                 <div>Loading...</div>
@@ -146,7 +160,7 @@ function CalendarContainer({ ...props }) {
                     step={15}
                     timeslots={4}
                 />
-        </div>
+          </div>
     )
 }
 

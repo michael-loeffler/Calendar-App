@@ -5,47 +5,32 @@ import { REMOVE_EVENT, UPDATE_EVENT } from "../utils/mutations"
 
 Modal.setAppElement('#root');
 
-const EventDetail = ({onEventDetail, showModal, onClose, toggleModal}) => {
-  const [isOpen, setIsOpen] = useState(showModal);
+const EventDetail = ({selectedEvent, showDetails, handleUpdateEvent, onClose, toggleDetails}) => {
+  const [isOpen, setIsOpen] = useState(showDetails);
 
   useEffect(() => {
-    setIsOpen(showModal);
-  }, [showModal])
+    setIsOpen(showDetails);
+  }, [showDetails])
 
   const [updateEvent] = useMutation (UPDATE_EVENT)
-  // const [removeEvent]= useMutation (REMOVE_EVENT)
+  //create a function in the container - which will be passed as a prop in Eventdetails
+  // if someone clicks Update- the modal will close and create event form opens 
+  const [removeEvent]= useMutation (REMOVE_EVENT)
 
-  const [eventData, setEventData] = useState({ title: '', start: '', end: '', description: '', location: '', allDay: false, color: ''});
-
-  useEffect(() => {
-    setEventData({...eventData})
-  }, [])
-  console.log(eventData);
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setEventData({ ...eventData, [name]: value});
-  };
-
-  const handleEventDetail = async () => {
+  const handleRemoveEvent = async () => {
     try {
-    const response = await updateEvent({ variables: eventData});
-    console.log('response: ', response);
-    setEventData({ title: '', start: '', end: '', description: '', location: '', allDay: false, color: '' });
-    setIsOpen(false);
-    onEventDetail(response.data.updateEvent);
-    // const response = await removeEvent({ variables: _id: eventId});
+      const response = await removeEvent({ variables: {_id: selectedEvent._id}});
     } catch (error) {
       console.log(error);
     }
   };
 
+  const handleEditClick = () => {
+    handleUpdateEvent(selectedEvent)
+  };
 
   return (
     <> 
-      <div>
-      onClick={toggleModal}
-      </div>
       <Modal
         isOpen={isOpen}
         onRequestClose={onClose}
@@ -60,24 +45,21 @@ const EventDetail = ({onEventDetail, showModal, onClose, toggleModal}) => {
               type="text"
               placeholder="Title"
               name="title"
-              value={eventData.title}
-              onChange={handleInputChange}
+              value={updateEvent.title}
               className="border border-gray-400 rounded-lg py-2 px-4"
             />
             <input
               type="datetime-local"
               placeholder="Start"
               name="start"
-              value={eventData.start}
-              onChange={handleInputChange}
+              value={updateEvent.start}
               className="border border-gray-400 rounded-lg py-2 px-4"
             />
             <input
               type="datetime-local"
               placeholder="End"
               name="end"
-              value={eventData.end}
-              onChange={handleInputChange}
+              value={updateEvent.end}
               className="border border-gray-400 rounded-lg py-2 px-4"
             />
             <label>Location:</label>
@@ -85,8 +67,7 @@ const EventDetail = ({onEventDetail, showModal, onClose, toggleModal}) => {
               type="text"
               placeholder="location"
               name="location"
-              value={eventData.location}
-              onChange={handleInputChange}
+              value={updateEvent.location}
               className="border border-gray-400 rounded-lg py-2 px-4"
             />
             <label>Description:</label>
@@ -94,14 +75,13 @@ const EventDetail = ({onEventDetail, showModal, onClose, toggleModal}) => {
               type="text"
               placeholder="description"
               name="description"
-              value={eventData.description}
-              onChange={handleInputChange}
+              value={updateEvent.description}
               className="border border-gray-400 rounded-lg py-2 px-4"
             />
           </div>
           <div className="form-group">
             <label>Color</label>
-            <select name="color" value={eventData.color} onChange={handleInputChange}>
+            <select name="color" value={updateEvent.color}>
               <option value="">Select a color</option>
               <option value="lightblue">Light Blue</option>
               <option value="lightgreen">Light Green</option>
@@ -113,13 +93,13 @@ const EventDetail = ({onEventDetail, showModal, onClose, toggleModal}) => {
           <div className="mt-6 flex justify-end">
             <button
               className="bg-blue-400 hover:bg-gray-500 text-white font-semibold rounded-lg py-2 px-6"
-              onClick={handleEventDetail}
+              onClick={handleEditClick}
             > 
               Edit
            </button>
            <button
              className="bg-red-400 hover:bg-gray-500 text-white font-semibold rounded-lg py-2 px-6"
-             onClick={handleEventDetail}
+             onClick={handleRemoveEvent}
             >
               Delete
            </button>
@@ -127,7 +107,7 @@ const EventDetail = ({onEventDetail, showModal, onClose, toggleModal}) => {
         </div>
         <button
           className="bg-red-400 hover:bg-gray-500 text-white font-semibold rounded-lg py-2 px-6"
-          onClick={toggleModal}
+          onClick={toggleDetails}
         >
           ✗
         </button>
