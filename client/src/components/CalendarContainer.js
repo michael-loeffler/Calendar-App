@@ -126,6 +126,7 @@ function CalendarContainer({ ...props }) {
                 onSelectSlot={handleSelectSlot}
                 step={15}
                 timeslots={4}
+                startAccessor={(event) => {return new Date(event.start)}}
             />
         </div>
     )
