@@ -104,7 +104,7 @@ function CalendarContainer({ ...props }) {
     );
 
     const handleCreateEvent = (event) => {
-        refetch({ email: email })
+        refetch()
         setShowModal(false);
     };
 
@@ -144,6 +144,7 @@ function CalendarContainer({ ...props }) {
               selectedEvent={selectedEvent}
               handleUpdateEvent={handleUpdateEvent}
               formatDate={formatDate}
+              refetch={refetch}
             />
             <Calendar
                 localizer={localizer}

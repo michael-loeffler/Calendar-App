@@ -5,7 +5,7 @@ import { REMOVE_EVENT, UPDATE_EVENT } from "../utils/mutations"
 
 Modal.setAppElement('#root');
 
-const EventDetail = ({selectedEvent, showDetails, handleUpdateEvent, onClose, toggleDetails, formatDate}) => {
+const EventDetail = ({selectedEvent, showDetails, handleUpdateEvent, onClose, toggleDetails, formatDate, refetch}) => {
   const [isOpen, setIsOpen] = useState(showDetails);
 
   useEffect(() => {
@@ -20,6 +20,7 @@ const EventDetail = ({selectedEvent, showDetails, handleUpdateEvent, onClose, to
   const handleRemoveEvent = async () => {
     try {
       await removeEvent({ variables: {eventId: selectedEvent._id}});
+      refetch()
       setIsOpen(false)
     } catch (error) {
       console.log(error);

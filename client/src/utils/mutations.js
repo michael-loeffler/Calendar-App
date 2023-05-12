@@ -43,13 +43,13 @@ export const REMOVE_EVENT = gql`
   mutation removeEvent($eventId: ID!) {
   removeEvent(eventId: $eventId) {
     _id
-     title
-     start
-     end
-     location
-     description
-     allDay
-     color
+    title
+    start
+    end
+    location
+    description
+    allDay
+    color
     }
   } 
 `;
