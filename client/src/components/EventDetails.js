@@ -5,7 +5,7 @@ import { REMOVE_EVENT, UPDATE_EVENT } from "../utils/mutations"
 
 Modal.setAppElement('#root');
 
-const EventDetail = ({selectedEvent, showDetails, handleUpdateEvent, onClose, toggleDetails}) => {
+const EventDetail = ({selectedEvent, showDetails, handleUpdateEvent, onClose, toggleDetails, formatDate}) => {
   const [isOpen, setIsOpen] = useState(showDetails);
 
   useEffect(() => {
@@ -19,7 +19,8 @@ const EventDetail = ({selectedEvent, showDetails, handleUpdateEvent, onClose, to
 
   const handleRemoveEvent = async () => {
     try {
-      const response = await removeEvent({ variables: {_id: selectedEvent._id}});
+      await removeEvent({ variables: {eventId: selectedEvent._id}});
+      setIsOpen(false)
     } catch (error) {
       console.log(error);
     }
@@ -45,21 +46,21 @@ const EventDetail = ({selectedEvent, showDetails, handleUpdateEvent, onClose, to
               type="text"
               placeholder="Title"
               name="title"
-              value={updateEvent.title}
+              value={selectedEvent.title}
               className="border border-gray-400 rounded-lg py-2 px-4"
             />
             <input
               type="datetime-local"
               placeholder="Start"
               name="start"
-              value={updateEvent.start}
+              value={formatDate(selectedEvent.start)}
               className="border border-gray-400 rounded-lg py-2 px-4"
             />
             <input
               type="datetime-local"
               placeholder="End"
               name="end"
-              value={updateEvent.end}
+              value={formatDate(selectedEvent.end)}
               className="border border-gray-400 rounded-lg py-2 px-4"
             />
             <label>Location:</label>
@@ -67,7 +68,7 @@ const EventDetail = ({selectedEvent, showDetails, handleUpdateEvent, onClose, to
               type="text"
               placeholder="location"
               name="location"
-              value={updateEvent.location}
+              value={selectedEvent.location}
               className="border border-gray-400 rounded-lg py-2 px-4"
             />
             <label>Description:</label>
@@ -75,13 +76,13 @@ const EventDetail = ({selectedEvent, showDetails, handleUpdateEvent, onClose, to
               type="text"
               placeholder="description"
               name="description"
-              value={updateEvent.description}
+              value={selectedEvent.description}
               className="border border-gray-400 rounded-lg py-2 px-4"
             />
           </div>
           <div className="form-group">
             <label>Color</label>
-            <select name="color" value={updateEvent.color}>
+            <select name="color" value={selectedEvent.color}>
               <option value="">Select a color</option>
               <option value="lightblue">Light Blue</option>
               <option value="lightgreen">Light Green</option>
