@@ -31,13 +31,21 @@ const CreateEvent = ({dragStart, dragEnd, onCreateEvent, showModal, onClose, tog
     setEventData({ ...eventData, [name]: value});
   };
 
+  const handleOpenModal = () => {
+    setIsOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsOpen(false);
+  };
+ 
   const handleCreateEvent = async () => {
     try {
       const response = await addEvent({ variables: eventData });   
       console.log('response: ', response);
       setEventData({ title: '', start: '', end: '', description: '', location: '', allDay: false, color: '' });
       setIsOpen(false);
-      onCreateEvent();
+      onCreateEvent({ ...response.data.addEvent});
     } catch (error) {
       console.error(error);
     }
@@ -52,13 +60,13 @@ const CreateEvent = ({dragStart, dragEnd, onCreateEvent, showModal, onClose, tog
     <>
       <button
         className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline mb-2"
-        onClick={toggleModal}
+        onClick={handleOpenModal}
       >
         Create Event
       </button>
       <Modal
         isOpen={isOpen}
-        onRequestClose={onClose}
+        onRequestClose={handleCloseModal}
         className="z-50 fixed inset-0 overflow-auto bg-opacity-80 bg-gray-900 flex justify-center items-center"
         overlayClassName="z-40 fixed inset-0 bg-gray-800 bg-opacity-75"
       >
@@ -116,8 +124,9 @@ const CreateEvent = ({dragStart, dragEnd, onCreateEvent, showModal, onClose, tog
               <option value="lightblue">Light Blue</option>
               <option value="lightgreen">Light Green</option>
               <option value="lightpink">Light Pink</option>
-              <option value="lightyellow">Light Yellow</option>
+              <option value="lightsalmon">Light Salmon</option>
               <option value="lightcoral">Light Coral</option>
+              <option value="lightslategrey">Light Grey</option>
             </select>
           </div>
           <div className="mt-6 flex justify-end">
@@ -129,10 +138,7 @@ const CreateEvent = ({dragStart, dragEnd, onCreateEvent, showModal, onClose, tog
             </button>
             <button
               className="bg-gray-400 hover:bg-gray-500 text-white font-semibold rounded-lg py-2 px-6"
-              onClick={() => {
-                toggleModal();
-                clearForm();
-              }}
+              onClick={handleCloseModal}
             >
               Cancel
             </button>
@@ -144,3 +150,5 @@ const CreateEvent = ({dragStart, dragEnd, onCreateEvent, showModal, onClose, tog
 };
 
 export default CreateEvent;
+
+

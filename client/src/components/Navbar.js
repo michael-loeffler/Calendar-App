@@ -11,23 +11,23 @@ const AppNavbar = () => {
 
   return (
     <>
-      <Navbar bg='dark' variant='dark' expand='lg'>
-        <Container fluid>
-          <Navbar.Toggle aria-controls='navbar' />
-          <Navbar.Collapse id='navbar'>
-            <Nav className='ml-auto'>
-              {/* if user is logged in show saved books and logout */}
-              {Auth.loggedIn() ? (
-                <>
-                  <Nav.Link onClick={Auth.logout}>Logout</Nav.Link>
-                </>
-              ) : (
-                <Nav.Link onClick={() => setShowModal(true)}>Login/Sign Up</Nav.Link>
-              )}
-            </Nav>
-          </Navbar.Collapse>
-        </Container>
-      </Navbar>
+      <Navbar bg='' variant='muted' expand='lg' className='mb-3' style={{background: '#A8E5F9',fontSize: '18px', fontWeight: 'bold', color: 'white', textShadow: 'black', borderBottom: '1px solid black'}}>
+  <Container fluid>
+    <Navbar.Toggle aria-controls='navbar' />
+    <Navbar.Collapse id='navbar'>
+      <Nav className='ml-auto'>
+        {/* if user is logged in show saved books and logout */}
+        {Auth.loggedIn() ? (
+          <>
+            <Nav.Link onClick={Auth.logout} style={{border: '2px solid black', borderRadius: '40px', background: '#DFE1E1' }}>Logout</Nav.Link>
+          </>
+        ) : (
+          <Nav.Link onClick={() => setShowModal(true)} style={{border: '2px solid black', borderRadius: '40px', background: '#DFE1E1' }}>Login/Sign Up</Nav.Link>
+        )}
+      </Nav>
+    </Navbar.Collapse>
+  </Container>
+</Navbar>
       {/* set modal data up */}
       <Modal
         size='lg'
