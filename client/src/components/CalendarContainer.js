@@ -12,6 +12,12 @@ import '../index.css';
 import { useQuery } from "@apollo/client";
 import { QUERY_EVENTS } from '../utils/queries';
 import Auth from '../utils/auth';
+import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
+import 'react-big-calendar/lib/addons/dragAndDrop/styles.css'
+import { useMutation } from '@apollo/client'
+import { UPDATE_EVENT } from '../utils/mutations'
+
+const DragAndDropCalendar = withDragAndDrop(Calendar);
 
 dayjs.extend(timezone);
 dayjs.extend(advancedFormat);
@@ -135,12 +141,12 @@ function CalendarContainer({ ...props }) {
         }
     }, [data])
 
-    const [start, setStart] = useState();
-    const [end, setEnd] = useState();
+    const [dragStart, setDragStart] = useState();
+    const [dragEnd, setDragEnd] = useState();
     const [showModal, setShowModal] = useState();
     const [selectedEvent, setSelectedEvent] = useState({});
-    const [showDetails, setShowDetails] =useState();
-    const [eventUpdate, setEventUpdate] = useState();
+    const [showDetails, setShowDetails] = useState();
+    const [eventUpdate, setEventUpdate] = useState({});
     const formatDate = (date) => dayjs.utc(date).local().format().slice(0, 19)
 
     const handleSelectSlot = useCallback(
@@ -148,21 +154,56 @@ function CalendarContainer({ ...props }) {
             start = formatDate(start);
             end = formatDate(end);
             console.log(end);
-            setStart(start);
-            setEnd(end);
+            setDragStart(start);
+            setDragEnd(end);
             setShowModal(true);
             // trigger NewEventForm modal and pre-populate start and end time
         }, []
     );
 
-    const handleSelectEvent = useCallback(
-         (event) => {
-            setSelectedEvent(event)
-            setShowDetails(true);
-        }, [] 
+    const [updateEvent] = useMutation(UPDATE_EVENT)
+    const moveEvent = useCallback(
+        async ({ event, start, end, isAllDay: droppedOnAllDaySlot = false }) => {
+            const { allDay } = event;
+            if (!allDay && droppedOnAllDaySlot) {
+                event.allDay = true;
+            }
+            try {
+                start = formatDate(start);
+                end = formatDate(end);
+                const response = await updateEvent({ variables: { eventId: event._id, ...event, start: start, end: end } });
+                console.log('response: ', response);
+                refetch();
+            } catch (error) {
+                console.error(error);
+            }
+
+        }, []
     );
 
-    const handleCreateEvent = (event) => {
+    const resizeEvent = useCallback(
+        async ({ event, start, end }) => {
+            try {
+                start = formatDate(start);
+                end = formatDate(end);
+                const response = await updateEvent({ variables: { eventId: event._id, ...event, start: start, end: end } });
+                console.log('response: ', response);
+                refetch();
+            } catch (error) {
+                console.error(error);
+            }
+        },
+        []
+    )
+
+    const handleSelectEvent = useCallback(
+        (event) => {
+            setSelectedEvent(event)
+            setShowDetails(true);
+        }, []
+    );
+
+    const handleCreateEvent = () => {
         refetch()
         setShowModal(false);
     };
@@ -179,33 +220,35 @@ function CalendarContainer({ ...props }) {
 
     const toggleModal = () => {
         setShowModal(!showModal)
-    };   
+    };
 
     const toggleDetails = () => {
         setShowDetails(!showDetails)
-    };  
+    };
 
-        return (
-          <div className="mt-2" {...props}>
+    return (
+        <div className="mt-2" {...props}>
             <CreateEvent
                 onCreateEvent={handleCreateEvent}
                 showModal={showModal}
                 onClose={handleClose}
                 toggleModal={toggleModal}
-                start={start}
-                end={end}
+                dragStart={dragStart}
+                dragEnd={dragEnd}
                 eventUpdate={eventUpdate}
+                setEventUpdate={setEventUpdate}
+                formatDate={formatDate}
             />
             <EventDetails
-            //   onEventDetail={handleEventDetail}
-              showDetails={showDetails}
-              toggleDetails={toggleDetails}
-              selectedEvent={selectedEvent}
-              handleUpdateEvent={handleUpdateEvent}
-              formatDate={formatDate}
-              refetch={refetch}
+                //   onEventDetail={handleEventDetail}
+                showDetails={showDetails}
+                toggleDetails={toggleDetails}
+                selectedEvent={selectedEvent}
+                handleUpdateEvent={handleUpdateEvent}
+                formatDate={formatDate}
+                refetch={refetch}
             />
-            <Calendar
+            <DragAndDropCalendar
                 localizer={localizer}
                 components={components}
                 views={views}
@@ -217,8 +260,10 @@ function CalendarContainer({ ...props }) {
                 onSelectSlot={handleSelectSlot}
                 step={15}
                 timeslots={4}
-                startAccessor={(event) => {return new Date(event.start)}}
-                endAccessor={(event) => {return new Date(event.end)}}
+                startAccessor={(event) => { return new Date(event.start) }}
+                endAccessor={(event) => { return new Date(event.end) }}
+                onEventDrop={moveEvent}
+                onEventResize={resizeEvent}
                 eventPropGetter={eventPropGetter}
             />
         </div>
