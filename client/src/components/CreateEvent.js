@@ -24,8 +24,6 @@ const CreateEvent = ({dragStart, dragEnd, onCreateEvent, showModal, onClose, tog
 
   useEffect(() => {
     setEventData({...eventData, start: dragStart, end: dragEnd, ...eventUpdate})
-    console.log(eventData);
-    console.log(start)
   }, [dragStart, dragEnd, eventUpdate])
 
   const handleInputChange = (e) => {

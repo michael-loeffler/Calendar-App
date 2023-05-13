@@ -13,6 +13,7 @@ import { useQuery } from "@apollo/client";
 import { QUERY_EVENTS } from '../utils/queries';
 import Auth from '../utils/auth';
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
+import 'react-big-calendar/lib/addons/dragAndDrop/styles.css'
 import { useMutation } from '@apollo/client'
 import { UPDATE_EVENT } from '../utils/mutations'
 
@@ -85,7 +86,7 @@ function CalendarContainer({ ...props }) {
     const [dragEnd, setDragEnd] = useState();
     const [showModal, setShowModal] = useState();
     const [selectedEvent, setSelectedEvent] = useState({});
-    const [showDetails, setShowDetails] =useState();
+    const [showDetails, setShowDetails] = useState();
     const [eventUpdate, setEventUpdate] = useState({});
     const formatDate = (date) => dayjs.utc(date).local().format().slice(0, 19)
 
@@ -111,12 +112,12 @@ function CalendarContainer({ ...props }) {
             try {
                 start = formatDate(start);
                 end = formatDate(end);
-                const response = await updateEvent({ variables: {eventId: event._id, ...event, start: start, end: end} });   
+                const response = await updateEvent({ variables: { eventId: event._id, ...event, start: start, end: end } });
                 console.log('response: ', response);
                 refetch();
-              } catch (error) {
+            } catch (error) {
                 console.error(error);
-              }
+            }
 
         }, []
     );
@@ -126,21 +127,21 @@ function CalendarContainer({ ...props }) {
             try {
                 start = formatDate(start);
                 end = formatDate(end);
-                const response = await updateEvent({ variables: {eventId: event._id, ...event, start: start, end: end} });   
+                const response = await updateEvent({ variables: { eventId: event._id, ...event, start: start, end: end } });
                 console.log('response: ', response);
                 refetch();
-              } catch (error) {
+            } catch (error) {
                 console.error(error);
-              }
+            }
         },
         []
-      )
+    )
 
     const handleSelectEvent = useCallback(
-         (event) => {
+        (event) => {
             setSelectedEvent(event)
             setShowDetails(true);
-        }, [] 
+        }, []
     );
 
     const handleCreateEvent = () => {
@@ -160,14 +161,14 @@ function CalendarContainer({ ...props }) {
 
     const toggleModal = () => {
         setShowModal(!showModal)
-    };   
+    };
 
     const toggleDetails = () => {
         setShowDetails(!showDetails)
-    };  
+    };
 
-        return (
-          <div className="mt-2" {...props}>
+    return (
+        <div className="mt-2" {...props}>
             <CreateEvent
                 onCreateEvent={handleCreateEvent}
                 showModal={showModal}
@@ -180,13 +181,13 @@ function CalendarContainer({ ...props }) {
                 formatDate={formatDate}
             />
             <EventDetails
-            //   onEventDetail={handleEventDetail}
-              showDetails={showDetails}
-              toggleDetails={toggleDetails}
-              selectedEvent={selectedEvent}
-              handleUpdateEvent={handleUpdateEvent}
-              formatDate={formatDate}
-              refetch={refetch}
+                //   onEventDetail={handleEventDetail}
+                showDetails={showDetails}
+                toggleDetails={toggleDetails}
+                selectedEvent={selectedEvent}
+                handleUpdateEvent={handleUpdateEvent}
+                formatDate={formatDate}
+                refetch={refetch}
             />
             <DragAndDropCalendar
                 localizer={localizer}
@@ -200,11 +201,10 @@ function CalendarContainer({ ...props }) {
                 onSelectSlot={handleSelectSlot}
                 step={15}
                 timeslots={4}
-                startAccessor={(event) => {return new Date(event.start)}}
-                endAccessor={(event) => {return new Date(event.end)}}
+                startAccessor={(event) => { return new Date(event.start) }}
+                endAccessor={(event) => { return new Date(event.end) }}
                 onEventDrop={moveEvent}
                 onEventResize={resizeEvent}
-                resizable
             />
         </div>
     )
