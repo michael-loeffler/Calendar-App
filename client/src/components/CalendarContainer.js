@@ -121,6 +121,21 @@ function CalendarContainer({ ...props }) {
         }, []
     );
 
+    const resizeEvent = useCallback(
+        async ({ event, start, end }) => {
+            try {
+                start = formatDate(start);
+                end = formatDate(end);
+                const response = await updateEvent({ variables: {eventId: event._id, ...event, start: start, end: end} });   
+                console.log('response: ', response);
+                refetch();
+              } catch (error) {
+                console.error(error);
+              }
+        },
+        []
+      )
+
     const handleSelectEvent = useCallback(
          (event) => {
             setSelectedEvent(event)
@@ -186,6 +201,8 @@ function CalendarContainer({ ...props }) {
                 startAccessor={(event) => {return new Date(event.start)}}
                 endAccessor={(event) => {return new Date(event.end)}}
                 onEventDrop={moveEvent}
+                onEventResize={resizeEvent}
+                resizable
             />
         </div>
     )
