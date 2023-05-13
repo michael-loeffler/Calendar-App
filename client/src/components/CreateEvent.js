@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useMutation } from '@apollo/client'
 import { ADD_EVENT } from '../utils/mutations'
 import Modal from 'react-modal';
@@ -38,7 +38,7 @@ const CreateEvent = ({start, end, onCreateEvent, showModal, onClose, toggleModal
     try {
       const response = await addEvent({ variables: eventData });   
       console.log('response: ', response);
-      setEventData({ title: '', start: '', end: '', description: '', location: '', allDay: '', color: '' });
+      setEventData({ title: '', start: '', end: '', description: '', location: '', allDay: false, color: '' });
       setIsOpen(false);
       onCreateEvent({ ...response.data.addEvent});
     } catch (error) {
@@ -114,8 +114,9 @@ const CreateEvent = ({start, end, onCreateEvent, showModal, onClose, toggleModal
               <option value="lightblue">Light Blue</option>
               <option value="lightgreen">Light Green</option>
               <option value="lightpink">Light Pink</option>
-              <option value="lightyellow">Light Yellow</option>
+              <option value="lightsalmon">Light Salmon</option>
               <option value="lightcoral">Light Coral</option>
+              <option value="lightslategrey">Light Grey</option>
             </select>
           </div>
           <div className="mt-6 flex justify-end">
@@ -139,3 +140,5 @@ const CreateEvent = ({start, end, onCreateEvent, showModal, onClose, toggleModal
 };
 
 export default CreateEvent;
+
+

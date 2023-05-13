@@ -57,7 +57,66 @@ function CalendarContainer({ ...props }) {
         }),
         []
     );
-
+    const eventPropGetter = useCallback(
+        (event, start, end) => ({
+          ...(event.color === "lightgreen" && {
+            style: {
+              backgroundColor: 'lightgreen',
+              border: '2px solid darkgreen',
+              color: 'white',
+              fontWeight: 'bold',
+              fontSize: '16px',
+            },
+          }),
+          ...(event.color === "lightblue" && {
+            style: {
+              backgroundColor: 'lightblue',
+              border: '2px solid darkblue',
+              color: 'white',
+              fontWeight: 'bold',
+              fontSize: '16px',
+            },
+          }),
+          ...(event.color === "lightpink" && {
+            style: {
+              backgroundColor: 'lightpink',
+              border: '2px solid darkred',
+              color: 'white',
+              fontWeight: 'bold',
+              fontSize: '16px',
+            },
+          }),
+          ...(event.color === "lightsalmon" && {
+            style: {
+              backgroundColor: 'lightsalmon',
+              border: '2px solid darkred',
+              color: 'white',
+              fontWeight: 'bold',
+              fontSize: '16px',
+            },
+          }),
+          ...(event.color === "lightcoral" && {
+            style: {
+              backgroundColor: 'lightcoral',
+              border: '2px solid darkred',
+              color: 'white',
+              fontWeight: 'bold',
+              fontSize: '16px',
+            },
+          }),
+          ...(event.color === "lightslategrey" && {
+            style: {
+              backgroundColor: 'lightslategrey',
+              border: '2px solid black',
+              color: 'white',
+              fontWeight: 'bold',
+              fontSize: '16px',
+            },
+          }),
+        }),
+        []
+      );
+        
     let email = '';
 
     if (Auth.loggedIn()) {
@@ -160,6 +219,7 @@ function CalendarContainer({ ...props }) {
                 timeslots={4}
                 startAccessor={(event) => {return new Date(event.start)}}
                 endAccessor={(event) => {return new Date(event.end)}}
+                eventPropGetter={eventPropGetter}
             />
         </div>
     )
