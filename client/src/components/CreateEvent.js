@@ -24,8 +24,6 @@ const CreateEvent = ({dragStart, dragEnd, onCreateEvent, showModal, onClose, tog
 
   useEffect(() => {
     setEventData({...eventData, start: dragStart, end: dragEnd, ...eventUpdate})
-    console.log(eventData);
-    console.log(start)
   }, [dragStart, dragEnd, eventUpdate])
 
   const handleInputChange = (e) => {
@@ -39,7 +37,7 @@ const CreateEvent = ({dragStart, dragEnd, onCreateEvent, showModal, onClose, tog
       console.log('response: ', response);
       setEventData({ title: '', start: '', end: '', description: '', location: '', allDay: false, color: '' });
       setIsOpen(false);
-      onCreateEvent(response.data.addEvent);
+      onCreateEvent();
     } catch (error) {
       console.error(error);
     }
