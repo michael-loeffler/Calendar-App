@@ -13,15 +13,14 @@ const EventDetail = ({selectedEvent, showDetails, handleUpdateEvent, onClose, to
   }, [showDetails])
 
   const [updateEvent] = useMutation (UPDATE_EVENT)
-  //create a function in the container - which will be passed as a prop in Eventdetails
-  // if someone clicks Update- the modal will close and create event form opens 
+
   const [removeEvent]= useMutation (REMOVE_EVENT)
 
   const handleRemoveEvent = async () => {
     try {
       await removeEvent({ variables: {eventId: selectedEvent._id}});
       refetch()
-      setIsOpen(false)
+      toggleDetails(false)
     } catch (error) {
       console.log(error);
     }
@@ -39,47 +38,38 @@ const EventDetail = ({selectedEvent, showDetails, handleUpdateEvent, onClose, to
         className="z-50 fixed inset-0 overflow-auto bg-opacity-80 bg-gray-900 flex justify-center items-center"
         overlayClassName="z-40 fixed inset-0 bg-gray-800 bg-opacity-75"
       >
-      <div className="bg-white rounded-lg px-8 py-6">
-          <h2 className="text-lg font-semibold mb-4">Edit Event</h2>
-          <div className="flex flex-col gap-4">
-            <label>Title:</label> 
-            <input
-              type="text"
-              placeholder="Title"
-              name="title"
-              value={selectedEvent.title}
-              className="border border-gray-400 rounded-lg py-2 px-4"
-            />
-            <input
+      <div className="bg-white rounded-lg px-4 py-3">
+        <div className="mt-1 flex justify-end">
+        <button id="exitBtn"
+          className="bg-red-400 hover:bg-gray-500 text-white font-semibold rounded-lg py-1 px-3"
+          onClick={toggleDetails}
+        >
+          ✗
+        </button> 
+        </div>
+          <div className="flex flex-col gap-1">
+            <h1>
+              {selectedEvent.title}
+            </h1>
+              <input
               type="datetime-local"
-              placeholder="Start"
-              name="start"
+              name="end"
               value={formatDate(selectedEvent.start)}
-              className="border border-gray-400 rounded-lg py-2 px-4"
-            />
+              readOnly
+              >
+              </input>
             <input
               type="datetime-local"
-              placeholder="End"
               name="end"
               value={formatDate(selectedEvent.end)}
-              className="border border-gray-400 rounded-lg py-2 px-4"
+              readOnly
             />
-            <label>Location:</label>
-            <input
-              type="text"
-              placeholder="location"
-              name="location"
-              value={selectedEvent.location}
-              className="border border-gray-400 rounded-lg py-2 px-4"
-            />
-            <label>Description:</label>
-            <input
-              type="text"
-              placeholder="description"
-              name="description"
-              value={selectedEvent.description}
-              className="border border-gray-400 rounded-lg py-2 px-4"
-            />
+            <p>
+              {selectedEvent.location}
+            </p>
+            <p>
+              {selectedEvent.description}
+            </p>
           </div>
           <div className="form-group">
             <label>Color</label>
@@ -92,27 +82,21 @@ const EventDetail = ({selectedEvent, showDetails, handleUpdateEvent, onClose, to
               <option value="lightcoral">Light Coral</option>
             </select>
           </div>
-          <div className="mt-6 flex justify-end">
+          <div className="mt-1 flex justify-end">
             <button
-              className="bg-blue-400 hover:bg-gray-500 text-white font-semibold rounded-lg py-2 px-6"
+              className="bg-gray-400 hover:bg-blue-500 text-white font-semibold rounded-lg py-2 px-4"
               onClick={handleEditClick}
             > 
-              Edit
-           </button>
+              🖉
+           </button>  
            <button
-             className="bg-red-400 hover:bg-gray-500 text-white font-semibold rounded-lg py-2 px-6"
+             className="bg-gray-400 hover:bg-red-500 text-white font-semibold rounded-lg py-2 px-4"
              onClick={handleRemoveEvent}
             >
-              Delete
+              🗑️
            </button>
           </div> 
-        </div>
-        <button
-          className="bg-red-400 hover:bg-gray-500 text-white font-semibold rounded-lg py-2 px-6"
-          onClick={toggleDetails}
-        >
-          ✗
-        </button>
+      </div>
     </Modal>
   </>
   );
