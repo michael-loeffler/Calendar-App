@@ -32,7 +32,7 @@ const CreateEvent = ({start, end, onCreateEvent, showModal, onClose, toggleModal
       console.log('response: ', response);
       setEventData({ title: '', start: '', end: '', description: '', location: '', allDay: false, color: '' });
       setIsOpen(false);
-      onCreateEvent(response.data.addEvent);
+      onCreateEvent();
     } catch (error) {
       console.error(error);
     }
