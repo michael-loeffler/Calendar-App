@@ -76,12 +76,12 @@ function CalendarContainer({ ...props }) {
         }
     }, [data])
 
-    const [start, setStart] = useState();
-    const [end, setEnd] = useState();
+    const [dragStart, setDragStart] = useState();
+    const [dragEnd, setDragEnd] = useState();
     const [showModal, setShowModal] = useState();
     const [selectedEvent, setSelectedEvent] = useState({});
     const [showDetails, setShowDetails] =useState();
-    const [eventUpdate, setEventUpdate] = useState();
+    const [eventUpdate, setEventUpdate] = useState({});
     const formatDate = (date) => dayjs.utc(date).local().format().slice(0, 19)
 
     const handleSelectSlot = useCallback(
@@ -89,8 +89,8 @@ function CalendarContainer({ ...props }) {
             start = formatDate(start);
             end = formatDate(end);
             console.log(end);
-            setStart(start);
-            setEnd(end);
+            setDragStart(start);
+            setDragEnd(end);
             setShowModal(true);
             // trigger NewEventForm modal and pre-populate start and end time
         }, []
@@ -133,9 +133,11 @@ function CalendarContainer({ ...props }) {
                 showModal={showModal}
                 onClose={handleClose}
                 toggleModal={toggleModal}
-                start={start}
-                end={end}
+                dragStart={dragStart}
+                dragEnd={dragEnd}
                 eventUpdate={eventUpdate}
+                setEventUpdate={setEventUpdate}
+                formatDate={formatDate}
             />
             <EventDetails
             //   onEventDetail={handleEventDetail}
