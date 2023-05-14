@@ -81,7 +81,9 @@ const CreateEvent = ({dragStart, dragEnd, showModal, toggleModal, eventDetailsEv
   return (
     <>
       <button
-        className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline mb-2"
+        className= "createBtn"
+        style = {{ background: '#394867', color: 'white', borderRadius: '40px', padding: '15px', marginBottom: '10px', fontWeight: 'bold'}} 
+        // className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline mb-2"
         onClick={handleOpenModal}
       >
         Create Event
