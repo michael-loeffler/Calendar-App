@@ -5,16 +5,14 @@ import { REMOVE_EVENT, UPDATE_EVENT } from "../utils/mutations"
 
 Modal.setAppElement('#root');
 
-const EventDetail = ({selectedEvent, showDetails, handleUpdateEvent, onClose, toggleDetails, formatDate, refetch}) => {
+const EventDetail = ({selectedEvent, showDetails, passEventToUpdateForm, onClose, toggleDetails, formatDate, refetch, setFormType}) => {
   const [isOpen, setIsOpen] = useState(showDetails);
 
   useEffect(() => {
     setIsOpen(showDetails);
   }, [showDetails])
 
-  const [updateEvent] = useMutation (UPDATE_EVENT)
-
-  const [removeEvent]= useMutation (REMOVE_EVENT)
+  const [removeEvent]= useMutation (REMOVE_EVENT);
 
   const handleRemoveEvent = async () => {
     try {
@@ -27,7 +25,8 @@ const EventDetail = ({selectedEvent, showDetails, handleUpdateEvent, onClose, to
   };
 
   const handleEditClick = () => {
-    handleUpdateEvent(selectedEvent)
+    passEventToUpdateForm(selectedEvent)
+    setFormType("Update")
   };
 
   return (
@@ -84,7 +83,7 @@ const EventDetail = ({selectedEvent, showDetails, handleUpdateEvent, onClose, to
           </div>
           <div className="mt-1 flex justify-end">
             <button
-              className="bg-gray-400 hover:bg-blue-500 text-white font-semibold rounded-lg py-2 px-4"
+              className="mr-4 bg-gray-400 hover:bg-blue-500 text-white font-semibold rounded-lg py-2 px-4"
               onClick={handleEditClick}
             > 
               🖉
