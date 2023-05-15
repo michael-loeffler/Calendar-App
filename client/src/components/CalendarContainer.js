@@ -162,7 +162,6 @@ function CalendarContainer({ ...props }) {
     const [eventDetailsEvent, setEventDetailsEvent] = useState({});
     const [formType, setFormType] = useState();
     const [errorLogin, setErrorLogin] = useState(true);
-    const [isOpen, setIsOpen] = useState(errorLogin);
 
     // This function gets the accurate time for the user's local timezone and slices off the timezone offset from the date string
     const formatDate = (date) => dayjs.utc(date).local().format().slice(0, 19);
@@ -243,10 +242,6 @@ function CalendarContainer({ ...props }) {
         setErrorLogin(!errorLogin)
     } 
 
-    useEffect(() => {
-        setIsOpen(errorLogin);
-    }, [errorLogin])
-
     return (
         <>
             {loggedIn ? (
@@ -295,11 +290,11 @@ function CalendarContainer({ ...props }) {
             ) : (
                 <Modal
                  isOpen={errorLogin}
-                //  onRequestClose={onClose}
                  className="z-50 fixed inset-0 overflow-auto bg-opacity-40 bg-gray-900 flex justify-center items-center max-width-25 max-height-25"
                  overlayClassName="z-40 fixed inset-0 bg-gray-800 bg-opacity-25"
                 >
-                  <div className="bg-white rounded-lg px-8 py-6">
+                  <div className="bg-white rounded-lg px-8 py-6"
+                  >
                     <div className="mt-1 flex justify-end">
                     <button
                       className="bg-red-400 hover:bg-gray-500 text-white font-semibold rounded-lg py-1 px-3"
@@ -310,8 +305,10 @@ function CalendarContainer({ ...props }) {
                     ✗
                     </button>
                     </div>
-                    <h2 className="text-xlg font-semibold mb-4 text-danger">⚠ You need to log in or sign up to view your Calendar!</h2>
-                    <div className="flex flex-col gap-1">
+                    <h2 className="text-xlg font-semibold mb-4 mt-2"
+                    style = {{ color: '#1B9C85' }}
+                    >Please log in or sign up to view your Calendar 📅</h2>
+                    <div className="flex flex-col gap-2">
                     </div>
                   </div>
                </Modal>
