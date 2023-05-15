@@ -5,31 +5,23 @@ import Modal from 'react-modal';
 
 Modal.setAppElement('#root');
 
-const CreateEvent = ({dragStart, dragEnd, showModal, toggleModal, eventDetailsEvent, setEventDetailsEvent, formatDate, refetch, formType, setFormType}) => {
+const CreateEvent = ({dragStart, dragEnd, setDragStart, setDragEnd, showModal, toggleModal, eventDetailsEvent, setEventDetailsEvent, refetch, formType, setFormType}) => {
   const [isOpen, setIsOpen] = useState(showModal);
-  
-   let {title, start, end, description, location, allDay, color} = { ...eventDetailsEvent};
-
-   start = formatDate(start);
-   end = formatDate(end);
-   eventDetailsEvent = {...eventDetailsEvent, start: start, end: end};
-
+  const [eventData, setEventData] = useState({})
+    
   useEffect(() => {
       setIsOpen(showModal);
   }, [showModal])
 
   const [addEvent] = useMutation(ADD_EVENT)
   
-  const [eventData, setEventData] = useState({title: title || '', start: start || dragStart || '', end: end || dragEnd || '', description: description || '', location: location || '', allDay: allDay || false, color: color || ''});
+  useEffect(() => {
+    setEventData(eventDetailsEvent)
+  }, [eventDetailsEvent])
 
   useEffect(() => {
-    setEventData({...eventData, ...eventDetailsEvent})
-  }, [])
-
-  // useEffect(() => {
-  //   setEventData({...eventData, start: dragStart, end: dragEnd})
-  // }, [dragStart, dragEnd])
-
+    setEventData({start: dragStart, end: dragEnd})
+  }, [dragStart, dragEnd])
   
   const handleInputChange = (e) => {
     const { name, value } = e.target;
