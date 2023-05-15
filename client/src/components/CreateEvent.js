@@ -6,31 +6,24 @@ import '../index';
 
 Modal.setAppElement('#root');
 
-const CreateEvent = ({dragStart, dragEnd, showModal, toggleModal, eventDetailsEvent, setEventDetailsEvent, formatDate, refetch, formType, setFormType}) => {
+const CreateEvent = ({dragStart, dragEnd, setDragStart, setDragEnd, showModal, toggleModal, eventDetailsEvent, setEventDetailsEvent, refetch, formType, setFormType}) => {
   const [isOpen, setIsOpen] = useState(showModal);
-  
-   let {title, start, end, description, location, allDay, color} = { ...eventDetailsEvent};
-
-   start = formatDate(start);
-   end = formatDate(end);
-   eventDetailsEvent = {...eventDetailsEvent, start: start, end: end};
-
+  const [eventData, setEventData] = useState({})
+  const [errorOpen, setErrorOpen] = useState(false)
+    
   useEffect(() => {
       setIsOpen(showModal);
   }, [showModal])
 
   const [addEvent] = useMutation(ADD_EVENT)
   
-  const [eventData, setEventData] = useState({title: title || '', start: start || dragStart || '', end: end || dragEnd || '', description: description || '', location: location || '', allDay: allDay || false, color: color || ''});
+  useEffect(() => {
+    setEventData(eventDetailsEvent)
+  }, [eventDetailsEvent])
 
   useEffect(() => {
-    setEventData({...eventData, ...eventDetailsEvent})
-  }, [])
-
-  // useEffect(() => {
-  //   setEventData({...eventData, start: dragStart, end: dragEnd})
-  // }, [dragStart, dragEnd])
-
+    setEventData({start: dragStart, end: dragEnd, title: '', location: '', description: ''})
+  }, [dragStart, dragEnd])
   
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -38,6 +31,8 @@ const CreateEvent = ({dragStart, dragEnd, showModal, toggleModal, eventDetailsEv
   };
 
   const handleOpenModal = () => {
+    setDragStart('');
+    setDragEnd('');
     toggleModal();
   };
 
@@ -47,14 +42,13 @@ const CreateEvent = ({dragStart, dragEnd, showModal, toggleModal, eventDetailsEv
  
   const handleCreateEvent = async () => {
     try {
-      const response = await addEvent({ variables: eventData });   
-      console.log('response: ', response);
+      await addEvent({ variables: eventData });   
+      toggleModal();
+      refetch();
       clearForm();
-      setIsOpen(false);
-      refetch()
-      // setShowModal(false);
     } catch (error) {
       console.error(error);
+      toggleError();
     }
   };
 
@@ -62,12 +56,11 @@ const CreateEvent = ({dragStart, dragEnd, showModal, toggleModal, eventDetailsEv
 
   const handleUpdateEvent = async () => {
     try {
-      const response = await updateEvent ({ variables: {eventId: eventDetailsEvent._id, ...eventData} });
-      console.log('response: ', response);
-      setFormType('');
-      refetch();
-      clearForm();
+      await updateEvent ({ variables: {eventId: eventDetailsEvent._id, ...eventData} });
       toggleModal();
+      refetch();
+      setFormType('');
+      clearForm();
     } catch (error) {
       console.error(error);
     }
@@ -77,12 +70,19 @@ const CreateEvent = ({dragStart, dragEnd, showModal, toggleModal, eventDetailsEv
     setFormType('');
     setEventData({ title: '', start: '', end: '', description: '', location: '', allDay: false, color: '' });
     setEventDetailsEvent({ title: '', start: '', end: '', description: '', location: '', allDay: false, color: '' });
+    setDragStart('');
+    setDragEnd('');
+  }
+
+  const toggleError = () => {
+    setErrorOpen(!errorOpen)
   }
 
   return (
     <>
       <button
-        className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline mb-2 border border-black"
+        className= "createBtn"
+        style = {{ background: '#394867', color: 'white', borderRadius: '40px', padding: '14px', marginBottom: '10px', fontWeight: 'bold', hover: 'red'}} 
         onClick={handleOpenModal}
       >
         Create Event
@@ -90,14 +90,25 @@ const CreateEvent = ({dragStart, dragEnd, showModal, toggleModal, eventDetailsEv
       <Modal
         isOpen={isOpen}
         onRequestClose={handleCloseModal}
-        className="z-50 fixed inset-0 overflow-auto bg-opacity-80 bg-gray-900 flex justify-center items-center "
-        overlayClassName="z-40 fixed inset-0 bg-gray-800 bg-opacity-75"
+        className="z-50 fixed inset-0 overflow-auto bg-opacity-40 bg-gray-900 flex justify-center items-center"
+        overlayClassName="z-40 fixed inset-0 bg-gray-800 bg-opacity-25"
       >
         <div className="bg-white rounded-lg px-8 py-6">
+          <div className="mt-1 flex justify-end">
+          <button
+              className="bg-red-400 hover:bg-gray-500 text-white font-semibold rounded-lg py-1 px-3"
+              onClick={() => {
+                toggleModal();
+                clearForm();
+              }}
+            >
+            ✗
+          </button>
+          </div>
           {formType === "Update" ? (
           <h2 className="text-lg font-semibold mb-4">Update Event</h2>)
            : ( <h2 className="text-lg font-semibold mb-4">Create Event</h2> )}
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-1">
             <label>Title:</label> 
             <input
               type="text"
@@ -107,6 +118,7 @@ const CreateEvent = ({dragStart, dragEnd, showModal, toggleModal, eventDetailsEv
               onChange={handleInputChange}
               className="border border-gray-400 rounded-lg py-2 px-4"
             />
+            <label>Start Time:</label>
             <input
               type="datetime-local"
               placeholder="Start"
@@ -115,6 +127,7 @@ const CreateEvent = ({dragStart, dragEnd, showModal, toggleModal, eventDetailsEv
               onChange={handleInputChange}
               className="border border-gray-400 rounded-lg py-2 px-4"
             />
+            <label>End Time:</label>
             <input
               type="datetime-local"
               placeholder="End"
@@ -126,7 +139,7 @@ const CreateEvent = ({dragStart, dragEnd, showModal, toggleModal, eventDetailsEv
             <label>Location:</label>
             <input
               type="text"
-              placeholder="location"
+              placeholder="Location"
               name="location"
               value={eventData.location}
               onChange={handleInputChange}
@@ -135,7 +148,7 @@ const CreateEvent = ({dragStart, dragEnd, showModal, toggleModal, eventDetailsEv
             <label>Description:</label>
             <input
               type="text"
-              placeholder="description"
+              placeholder="Description"
               name="description"
               value={eventData.description}
               onChange={handleInputChange}
@@ -169,15 +182,28 @@ const CreateEvent = ({dragStart, dragEnd, showModal, toggleModal, eventDetailsEv
               Create
             </button>
             )}
-            <button
-              className="bg-gray-400 hover:bg-gray-500 text-white font-semibold rounded-lg py-2 px-6"
-             onClick={() => {
-                toggleModal();
-                clearForm();
+          </div>
+        </div>
+      </Modal>
+      <Modal
+        isOpen={errorOpen}
+        className="z-50 fixed inset-0 overflow-auto bg-opacity-65 bg-gray-900 flex justify-center items-center"
+        overlayClassName="z-40 fixed inset-0 bg-gray-800 bg-opacity-25"
+      >
+        <div className="bg-white rounded-lg px-8 py-6">
+          <div className="mt-1 flex justify-end">
+          <button
+              className="bg-red-400 hover:bg-gray-500 text-white font-semibold rounded-lg py-1 px-3"
+              onClick={() => {
+                toggleError();
               }}
             >
-              Cancel
-            </button>
+            ✗
+          </button>
+          </div>
+          <h2 className="text-lg font-semibold mb-4 text-danger">Something went wrong!</h2>
+          <div className="flex flex-col gap-1">
+            <p>Title, Start Time, and End Time are all required fields. Please close this message and try again.</p>
           </div>
         </div>
       </Modal>
