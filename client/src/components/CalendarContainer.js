@@ -147,7 +147,8 @@ function CalendarContainer({ ...props }) {
     const [showModal, setShowModal] = useState();
     const [selectedEvent, setSelectedEvent] = useState({});
     const [showDetails, setShowDetails] = useState();
-    const [eventUpdate, setEventUpdate] = useState({});
+    const [eventDetailsEvent, setEventDetailsEvent] = useState({});
+    const [formType, setFormType] = useState(); 
     const formatDate = (date) => dayjs.utc(date).local().format().slice(0, 19)
 
     const handleSelectSlot = useCallback(
@@ -158,7 +159,6 @@ function CalendarContainer({ ...props }) {
             setDragStart(start);
             setDragEnd(end);
             setShowModal(true);
-            // trigger NewEventForm modal and pre-populate start and end time
         }, []
     );
 
@@ -204,19 +204,10 @@ function CalendarContainer({ ...props }) {
         }, []
     );
 
-    const handleCreateEvent = () => {
-        refetch()
-        setShowModal(false);
-    };
-
-    const handleUpdateEvent = (event) => {
-        setEventUpdate(event);
+    const passEventToUpdateForm = (event) => {
+        setEventDetailsEvent(event);
         setShowDetails(false);
         setShowModal(true);
-    };
-
-    const handleClose = () => {
-        setShowModal(false);
     };
 
     const toggleModal = () => {
@@ -230,24 +221,25 @@ function CalendarContainer({ ...props }) {
     return (
         <div className="mt-2" {...props}>
             <CreateEvent
-                onCreateEvent={handleCreateEvent}
                 showModal={showModal}
-                onClose={handleClose}
                 toggleModal={toggleModal}
                 dragStart={dragStart}
                 dragEnd={dragEnd}
-                eventUpdate={eventUpdate}
-                setEventUpdate={setEventUpdate}
+                eventDetailsEvent={eventDetailsEvent}
+                setEventDetailsEvent={setEventDetailsEvent}
                 formatDate={formatDate}
+                formType={formType}
+                setFormType={setFormType}
             />
             <EventDetails
                 //   onEventDetail={handleEventDetail}
                 showDetails={showDetails}
                 toggleDetails={toggleDetails}
                 selectedEvent={selectedEvent}
-                handleUpdateEvent={handleUpdateEvent}
+                passEventToUpdateForm={passEventToUpdateForm}
                 formatDate={formatDate}
                 refetch={refetch}
+                setFormType={setFormType}
             />
             <DragAndDropCalendar
                 localizer={localizer}

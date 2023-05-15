@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { useMutation } from '@apollo/client'
-import { ADD_EVENT } from '../utils/mutations'
+import { ADD_EVENT, UPDATE_EVENT } from '../utils/mutations'
 import Modal from 'react-modal';
 
 Modal.setAppElement('#root');
 
-const CreateEvent = ({dragStart, dragEnd, onCreateEvent, showModal, onClose, toggleModal, eventUpdate, setEventUpdate, formatDate}) => {
+const CreateEvent = ({dragStart, dragEnd, showModal, toggleModal, eventDetailsEvent, setEventDetailsEvent, formatDate, refetch, formType, setFormType}) => {
   const [isOpen, setIsOpen] = useState(showModal);
   
-   let {title, start, end, description, location, allDay, color} = { ...eventUpdate};
+   let {title, start, end, description, location, allDay, color} = { ...eventDetailsEvent};
 
    start = formatDate(start);
    end = formatDate(end);
-   eventUpdate = {...eventUpdate, start: start, end: end};
+   eventDetailsEvent = {...eventDetailsEvent, start: start, end: end};
 
   useEffect(() => {
       setIsOpen(showModal);
@@ -23,16 +23,21 @@ const CreateEvent = ({dragStart, dragEnd, onCreateEvent, showModal, onClose, tog
   const [eventData, setEventData] = useState({title: title || '', start: start || dragStart || '', end: end || dragEnd || '', description: description || '', location: location || '', allDay: allDay || false, color: color || ''});
 
   useEffect(() => {
-    setEventData({...eventData, start: dragStart, end: dragEnd, ...eventUpdate})
-  }, [dragStart, dragEnd, eventUpdate])
+    setEventData({...eventData, ...eventDetailsEvent})
+  }, [])
 
+  // useEffect(() => {
+  //   setEventData({...eventData, start: dragStart, end: dragEnd})
+  // }, [dragStart, dragEnd])
+
+  
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setEventData({ ...eventData, [name]: value});
   };
 
   const handleOpenModal = () => {
-    setIsOpen(true);
+    toggleModal();
   };
 
   const handleCloseModal = () => {
@@ -43,17 +48,34 @@ const CreateEvent = ({dragStart, dragEnd, onCreateEvent, showModal, onClose, tog
     try {
       const response = await addEvent({ variables: eventData });   
       console.log('response: ', response);
-      setEventData({ title: '', start: '', end: '', description: '', location: '', allDay: false, color: '' });
+      clearForm();
       setIsOpen(false);
-      onCreateEvent({ ...response.data.addEvent});
+      refetch()
+      // setShowModal(false);
     } catch (error) {
       console.error(error);
     }
   };
 
+  const [updateEvent] = useMutation (UPDATE_EVENT);
+
+  const handleUpdateEvent = async () => {
+    try {
+      const response = await updateEvent ({ variables: {eventId: eventDetailsEvent._id, ...eventData} });
+      console.log('response: ', response);
+      setFormType('');
+      refetch();
+      clearForm();
+      toggleModal();
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   const clearForm = () => {
+    setFormType('');
     setEventData({ title: '', start: '', end: '', description: '', location: '', allDay: false, color: '' });
-    setEventUpdate({ title: '', start: '', end: '', description: '', location: '', allDay: false, color: '' });
+    setEventDetailsEvent({ title: '', start: '', end: '', description: '', location: '', allDay: false, color: '' });
   }
 
   return (
@@ -71,7 +93,9 @@ const CreateEvent = ({dragStart, dragEnd, onCreateEvent, showModal, onClose, tog
         overlayClassName="z-40 fixed inset-0 bg-gray-800 bg-opacity-75"
       >
         <div className="bg-white rounded-lg px-8 py-6">
-          <h2 className="text-lg font-semibold mb-4">Create Event</h2>
+          {formType === "Update" ? (
+          <h2 className="text-lg font-semibold mb-4">Update Event</h2>)
+           : ( <h2 className="text-lg font-semibold mb-4">Create Event</h2> )}
           <div className="flex flex-col gap-4">
             <label>Title:</label> 
             <input
@@ -130,15 +154,26 @@ const CreateEvent = ({dragStart, dragEnd, onCreateEvent, showModal, onClose, tog
             </select>
           </div>
           <div className="mt-6 flex justify-end">
+            {formType === "Update" ? (
             <button
+              className="mr-4 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-lg py-2 px-6"
+              onClick={handleUpdateEvent}
+              >
+              Update
+            </button>) : (
+              <button
               className="mr-4 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-lg py-2 px-6"
               onClick={handleCreateEvent}
             >
               Create
             </button>
+            )}
             <button
               className="bg-gray-400 hover:bg-gray-500 text-white font-semibold rounded-lg py-2 px-6"
-              onClick={handleCloseModal}
+             onClick={() => {
+                toggleModal();
+                clearForm();
+              }}
             >
               Cancel
             </button>
