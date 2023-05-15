@@ -191,7 +191,7 @@ function CalendarContainer({ ...props }) {
             } catch (error) {
                 console.error(error);
             }
-        }, []
+        }, [updateEvent, refetch]
     );
 
     // This function is called when a user resizes an event. The event itself, and its new start and end time are accessed and then the updateEvent mutation is called to update the entry in the database.
@@ -205,7 +205,7 @@ function CalendarContainer({ ...props }) {
             } catch (error) {
                 console.error(error);
             }
-        }, []
+        }, [updateEvent, refetch]
     );
 
     // This is the function that is called when a user clicks on an event. It stores the event that was clicked on and then toggles on the EventDetails modal
