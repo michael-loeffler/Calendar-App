@@ -43,6 +43,13 @@
     border-top: 1px solid #ddd;
   }
 
+  .rbc-header{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 4em;
+  }
+
 @media screen and (max-width: 1024
 ) {
     .rbc-time-gutter{
@@ -111,6 +118,9 @@
     .rbc-month-view {
         width: 100%;
     }
+    .rbc-month-header{
+        height: 2em;
+    }
     .rbc-week-row{
         width: 100%;
     }
@@ -118,14 +128,15 @@
         width: 100%;
     }
     .rbc-time-gutter{
-        width: 14%;
+        width: 17%;
         font-size: .7em;
     }
     .rbc-time-view{
-        width: 106% !important;
+        width: 100% !important;
+
     }
     .rbc-label{
-        width: 14% !important;
+        width: 12% !important;
     }
     .rbc-header{
         white-space: normal !important;
@@ -138,28 +149,36 @@
     }
     .rbc-header.rbc-today {
         width: 94%;
+        max-height: 4rem;
+        font-size: 18px;
+        
     }
     .rbc-header{
         width: 94%;
-        
+        line-height: 1em;
     }
     .rbc-time-header-gutter{
         width: 14%;
     }
     .rbc-time-header-content{
-       max-width:110%
+       width: 100%
     }
     #root > div > div > div.rbc-time-view > div.rbc-time-header.rbc-overflowing > div.rbc-time-header-content > div.rbc-allday-cell > div.rbc-row-bg{
         width: 92% !important;
+        line-height: 1em !important;
     }
     #root > div > div > div.rbc-time-view > div.rbc-time-header.rbc-overflowing > div.rbc-time-header-content > div.rbc-allday-cell > div.rbc-row-bg > div.rbc-day-bg.rbc-today{
         width: 92% !important;
     }
     #root > div > div > div.rbc-time-view > div.rbc-time-header.rbc-overflowing > div.rbc-time-header-content > div.rbc-row.rbc-time-header-cell > div.rbc-header.rbc-today{
         width: 90% !important;
-        line-height: 2em;
+        line-height: 1.1em;
     }
     #root > div > div > div.rbc-time-view > div.rbc-time-header.rbc-overflowing > div.rbc-time-header-content > div.rbc-row.rbc-time-header-cell{
         width: 92% !important;
+        height: 5em;
+    }
+    .rbc-day-bg + .rbc-day-bg{
+        border: 1px solid #ddd !important;
     }
 }
