@@ -74,11 +74,11 @@ const EventDetail = ({selectedEvent, showDetails, passEventToUpdateForm, onClose
             <label>Color</label>
             <select name="color" value={selectedEvent.color}>
               <option value="">Select a color</option>
-              <option value="lightblue">Light Blue</option>
-              <option value="lightgreen">Light Green</option>
-              <option value="lightpink">Light Pink</option>
-              <option value="lightyellow">Light Yellow</option>
-              <option value="lightcoral">Light Coral</option>
+              <option value="lightblue">Blue</option>
+              <option value="lightgreen">Green</option>
+              <option value="lightpink">Pink</option>
+              <option value="lightyellow">Yellow</option>
+              <option value="lightcoral">Coral</option>
             </select>
           </div>
           <div className="mt-1 flex justify-end">

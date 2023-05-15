@@ -4,18 +4,18 @@
 
 @import 'tailwindcss/utilities';
 
-body {
-    /* background-image: url("https://e0.pxfuel.com/wallpapers/591/208/desktop-wallpaper-cherry-blossom-1440p-resolution-flowers-2560x1440-cherry-blossom.jpg"); */
-    background-repeat: no-repeat;
-    background-size: cover;
+/* body {
+    background-image: url("https://e0.pxfuel.com/wallpapers/591/208/desktop-wallpaper-cherry-blossom-1440p-resolution-flowers-2560x1440-cherry-blossom.jpg");
+    background-repeat: no-repeat; 
+    background-size: cover; 
 
-}
+} */
 
 .rbc-toolbar-label {
     font-weight: bold;
     font-size: 25px;
     /* background-image: url("https://source.unsplash.com/100x100/?flowers"); */
-    color: black;
+    color: navy;
 
 }
 .rbc-row{
@@ -26,8 +26,22 @@ body {
     display: none !important;
 }
 /* .rbc-allday-cell{
-    display: none !important;
+    line-height: .1em !important;
 } */
+.form-group select {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  .form-group option {
+    border: 1px solid #ddd;
+    border-top: none;
+    padding: 5px 10px;
+  }
+  
+  .form-group option:first-child {
+    border-top: 1px solid #ddd;
+  }
 
 @media screen and (max-width: 1024
 ) {
@@ -56,7 +70,7 @@ body {
     .rbc-toolbar-label {
         font-weight: bold;
         font-size: 25px;
-
+    
     }
     .rbc-time-gutter{
         width: 14%;
@@ -67,6 +81,17 @@ body {
     }
   }
 @media screen and (max-width: 767px) {
+    .navbar-nav {
+        width: 100%;
+        margin-top: 0.5rem;
+        text-align: center;
+        font-size: 20px
+      }
+
+      .navbar-nav .nav-link {
+        border-radius: 0;
+        width: 100%;
+      }
     .rbc-row{
         line-height: 1em;
         font-size: 1.3em;
@@ -115,7 +140,26 @@ body {
         width: 94%;
     }
     .rbc-header{
-        width: 85%;
+        width: 94%;
         
+    }
+    .rbc-time-header-gutter{
+        width: 14%;
+    }
+    .rbc-time-header-content{
+       max-width:110%
+    }
+    #root > div > div > div.rbc-time-view > div.rbc-time-header.rbc-overflowing > div.rbc-time-header-content > div.rbc-allday-cell > div.rbc-row-bg{
+        width: 92% !important;
+    }
+    #root > div > div > div.rbc-time-view > div.rbc-time-header.rbc-overflowing > div.rbc-time-header-content > div.rbc-allday-cell > div.rbc-row-bg > div.rbc-day-bg.rbc-today{
+        width: 92% !important;
+    }
+    #root > div > div > div.rbc-time-view > div.rbc-time-header.rbc-overflowing > div.rbc-time-header-content > div.rbc-row.rbc-time-header-cell > div.rbc-header.rbc-today{
+        width: 90% !important;
+        line-height: 2em;
+    }
+    #root > div > div > div.rbc-time-view > div.rbc-time-header.rbc-overflowing > div.rbc-time-header-content > div.rbc-row.rbc-time-header-cell{
+        width: 92% !important;
     }
 }

@@ -3,6 +3,7 @@ import { Navbar, Nav, Container, Modal, Tab } from 'react-bootstrap';
 import SignUpForm from './SignupForm';
 import LoginForm from './LoginForm';
 import Auth from '../utils/auth';
+import '../index';
 
 const AppNavbar = () => {
   const [showModal, setShowModal] = useState(false);
@@ -79,21 +80,7 @@ const AppNavbar = () => {
         </Tab.Container>
       </Modal>
 
-      <style jsx>{`
-        @media (max-width: 1024px) {
-          .navbar-nav {
-            width: 100%;
-            margin-top: 0.5rem;
-            text-align: center;
-            font-size: 20px
-          }
 
-          .navbar-nav .nav-link {
-            border-radius: 0;
-            width: 100%;
-          }
-        }
-      `}</style>
     </>
   );
 };
