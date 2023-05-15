@@ -1,19 +1,22 @@
-import React, { useMemo, useState, useCallback, useEffect } from "react";
-import 'react-big-calendar/lib/css/react-big-calendar.css';
+import React, { useMemo, useState, useCallback, useEffect } from 'react';
 import { Calendar, Views, dayjsLocalizer } from 'react-big-calendar';
+import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
+
+import 'react-big-calendar/lib/css/react-big-calendar.css';
+import 'react-big-calendar/lib/addons/dragAndDrop/styles.css';
+import '../index.css';
+
 import dayjs from 'dayjs';
 import timezone from 'dayjs/plugin/timezone';
 import advancedFormat from 'dayjs/plugin/advancedFormat';
 import utc from 'dayjs/plugin/utc';
+
 import CreateEvent from './CreateEvent';
 import EventDetails from './EventDetails';
-// import seedEvents from './components/SeedEvents';
-import '../index.css';
-import { useQuery } from "@apollo/client";
-import { QUERY_EVENTS } from '../utils/queries';
 import Auth from '../utils/auth';
-import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
-import 'react-big-calendar/lib/addons/dragAndDrop/styles.css'
+
+import { useQuery } from '@apollo/client';
+import { QUERY_EVENTS } from '../utils/queries';
 import { useMutation } from '@apollo/client'
 import { UPDATE_EVENT } from '../utils/mutations'
 
@@ -64,8 +67,8 @@ function CalendarContainer({ ...props }) {
         []
     );
     const eventPropGetter = useCallback(
-        (event, start, end) => ({
-            ...(event.color === "lightgreen" && {
+        (event) => ({
+            ...(event.color === 'lightgreen' && {
                 style: {
                     backgroundColor: 'lightgreen',
                     border: '2px solid darkgreen',
@@ -74,7 +77,7 @@ function CalendarContainer({ ...props }) {
                     fontSize: '16px',
                 },
             }),
-            ...(event.color === "lightblue" && {
+            ...(event.color === 'lightblue' && {
                 style: {
                     backgroundColor: 'lightblue',
                     border: '2px solid darkblue',
@@ -83,7 +86,7 @@ function CalendarContainer({ ...props }) {
                     fontSize: '16px',
                 },
             }),
-            ...(event.color === "lightpink" && {
+            ...(event.color === 'lightpink' && {
                 style: {
                     backgroundColor: 'lightpink',
                     border: '2px solid darkred',
@@ -92,7 +95,7 @@ function CalendarContainer({ ...props }) {
                     fontSize: '16px',
                 },
             }),
-            ...(event.color === "lightsalmon" && {
+            ...(event.color === 'lightsalmon' && {
                 style: {
                     backgroundColor: 'lightsalmon',
                     border: '2px solid darkred',
@@ -101,7 +104,7 @@ function CalendarContainer({ ...props }) {
                     fontSize: '16px',
                 },
             }),
-            ...(event.color === "lightcoral" && {
+            ...(event.color === 'lightcoral' && {
                 style: {
                     backgroundColor: 'lightcoral',
                     border: '2px solid darkred',
@@ -110,7 +113,7 @@ function CalendarContainer({ ...props }) {
                     fontSize: '16px',
                 },
             }),
-            ...(event.color === "lightslategrey" && {
+            ...(event.color === 'lightslategrey' && {
                 style: {
                     backgroundColor: 'lightslategrey',
                     border: '2px solid black',
@@ -220,23 +223,21 @@ function CalendarContainer({ ...props }) {
     return (
         <>
         {loggedIn ? (
-                <div className="mt-2" {...props}>
+                <div className='mt-2' {...props}>
                     <CreateEvent
                         showModal={showModal}
                         toggleModal={toggleModal}
                         dragStart={dragStart}
                         dragEnd={dragEnd}
+                        setDragStart={setDragStart}
+                        setDragEnd={setDragEnd}
                         eventDetailsEvent={eventDetailsEvent}
                         setEventDetailsEvent={setEventDetailsEvent}
-                        formatDate={formatDate}
                         formType={formType}
                         setFormType={setFormType}
                         refetch={refetch}
-                        setDragStart={setDragStart}
-                        setDragEnd={setDragEnd}
                     />
                     <EventDetails
-                        //   onEventDetail={handleEventDetail}
                         showDetails={showDetails}
                         toggleDetails={toggleDetails}
                         selectedEvent={selectedEvent}

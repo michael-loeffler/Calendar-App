@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { useMutation } from '@apollo/client'
-import { ADD_EVENT, UPDATE_EVENT } from '../utils/mutations'
+import React, { useState, useEffect } from 'react';
+import { useMutation } from '@apollo/client';
+import { ADD_EVENT, UPDATE_EVENT } from '../utils/mutations';
 import Modal from 'react-modal';
 
 Modal.setAppElement('#root');
 
 const CreateEvent = ({dragStart, dragEnd, setDragStart, setDragEnd, showModal, toggleModal, eventDetailsEvent, setEventDetailsEvent, refetch, formType, setFormType}) => {
   const [isOpen, setIsOpen] = useState(showModal);
-  const [eventData, setEventData] = useState({})
+  const [eventData, setEventData] = useState({});
   const [errorOpen, setErrorOpen] = useState(false)
   const [dateError, setDateError] = useState(false);
     
@@ -15,12 +15,11 @@ const CreateEvent = ({dragStart, dragEnd, setDragStart, setDragEnd, showModal, t
       setIsOpen(showModal);
   }, [showModal])
 
-  const [addEvent] = useMutation(ADD_EVENT)
   
   useEffect(() => {
     setEventData(eventDetailsEvent)
   }, [eventDetailsEvent])
-
+  
   useEffect(() => {
     setEventData({start: dragStart, end: dragEnd, title: '', location: '', description: ''})
   }, [dragStart, dragEnd])
@@ -29,17 +28,19 @@ const CreateEvent = ({dragStart, dragEnd, setDragStart, setDragEnd, showModal, t
     const { name, value } = e.target;
     setEventData({ ...eventData, [name]: value});
   };
-
+  
   const handleOpenModal = () => {
     setDragStart('');
     setDragEnd('');
     toggleModal();
   };
-
+  
   const handleCloseModal = () => {
     setIsOpen(false);
   };
- 
+  
+  const [addEvent] = useMutation(ADD_EVENT);
+
   const handleCreateEvent = async () => {
     try {
       if (eventData.end < eventData.start) {
@@ -90,7 +91,7 @@ const CreateEvent = ({dragStart, dragEnd, setDragStart, setDragEnd, showModal, t
   return (
     <>
       <button
-        className= "createBtn"
+        className= 'createBtn'
         style = {{ background: '#394867', color: 'white', borderRadius: '40px', padding: '14px', marginBottom: '10px', fontWeight: 'bold', hover: 'red'}} 
         onClick={handleOpenModal}
       >
@@ -98,14 +99,14 @@ const CreateEvent = ({dragStart, dragEnd, setDragStart, setDragEnd, showModal, t
       </button>
       <Modal
         isOpen={isOpen}
-        onRequestClose={handleCloseModal}
-        className="z-50 fixed inset-0 overflow-auto bg-opacity-40 bg-gray-900 flex justify-center items-center"
-        overlayClassName="z-40 fixed inset-0 bg-gray-800 bg-opacity-25"
+        // onRequestClose={handleCloseModal}
+        className='z-50 fixed inset-0 overflow-auto bg-opacity-40 bg-gray-900 flex justify-center items-center'
+        overlayClassName='z-40 fixed inset-0 bg-gray-800 bg-opacity-25'
       >
-        <div className="bg-white rounded-lg px-8 py-6">
-          <div className="mt-1 flex justify-end">
+        <div className='bg-white rounded-lg px-8 py-6'>
+          <div className='mt-1 flex justify-end'>
           <button
-              className="bg-red-400 hover:bg-gray-500 text-white font-semibold rounded-lg py-1 px-3"
+              className='bg-red-400 hover:bg-gray-500 text-white font-semibold rounded-lg py-1 px-3'
               onClick={() => {
                 toggleModal();
                 clearForm();
@@ -114,78 +115,78 @@ const CreateEvent = ({dragStart, dragEnd, setDragStart, setDragEnd, showModal, t
             ✗
           </button>
           </div>
-          {formType === "Update" ? (
-          <h2 className="text-lg font-semibold mb-4">Update Event</h2>)
-           : ( <h2 className="text-lg font-semibold mb-4">Create Event</h2> )}
-          <div className="flex flex-col gap-1">
+          {formType === 'Update' ? (
+          <h2 className='text-lg font-semibold mb-4'>Update Event</h2>)
+           : ( <h2 className='text-lg font-semibold mb-4'>Create Event</h2> )}
+          <div className='flex flex-col gap-1'>
             <label>Title:</label> 
             <input
-              type="text"
-              placeholder="Title"
-              name="title"
+              type='text'
+              placeholder='Title'
+              name='title'
               value={eventData.title}
               onChange={handleInputChange}
-              className="border border-gray-400 rounded-lg py-2 px-4"
+              className='border border-gray-400 rounded-lg py-2 px-4'
             />
             <label>Start Time:</label>
             <input
-              type="datetime-local"
-              placeholder="Start"
-              name="start"
+              type='datetime-local'
+              placeholder='Start'
+              name='start'
               value={eventData.start}
               onChange={handleInputChange}
-              className="border border-gray-400 rounded-lg py-2 px-4"
+              className='border border-gray-400 rounded-lg py-2 px-4'
             />
             <label>End Time:</label>
             <input
-              type="datetime-local"
-              placeholder="End"
-              name="end"
+              type='datetime-local'
+              placeholder='End'
+              name='end'
               value={eventData.end}
               onChange={handleInputChange}
-              className="border border-gray-400 rounded-lg py-2 px-4"
+              className='border border-gray-400 rounded-lg py-2 px-4'
             />
             <label>Location:</label>
             <input
-              type="text"
-              placeholder="Location"
-              name="location"
+              type='text'
+              placeholder='Location'
+              name='location'
               value={eventData.location}
               onChange={handleInputChange}
-              className="border border-gray-400 rounded-lg py-2 px-4"
+              className='border border-gray-400 rounded-lg py-2 px-4'
             />
             <label>Description:</label>
             <input
-              type="text"
-              placeholder="Description"
-              name="description"
+              type='text'
+              placeholder='Description'
+              name='description'
               value={eventData.description}
               onChange={handleInputChange}
-              className="border border-gray-400 rounded-lg py-2 px-4"
+              className='border border-gray-400 rounded-lg py-2 px-4'
             />
           </div>
-          <div className="form-group">
+          <div className='form-group'>
             <label>Color</label>
-            <select name="color" value={eventData.color} onChange={handleInputChange}>
-              <option value="">Select a color</option>
-              <option value="lightblue">Light Blue</option>
-              <option value="lightgreen">Light Green</option>
-              <option value="lightpink">Light Pink</option>
-              <option value="lightsalmon">Light Salmon</option>
-              <option value="lightcoral">Light Coral</option>
-              <option value="lightslategrey">Light Grey</option>
+            <select name='color' value={eventData.color} onChange={handleInputChange}>
+              <option value=''>Select a color</option>
+              <option value='lightblue'>Light Blue</option>
+              <option value='lightgreen'>Light Green</option>
+              <option value='lightpink'>Light Pink</option>
+              <option value='lightsalmon'>Light Salmon</option>
+              <option value='lightcoral'>Light Coral</option>
+              <option value='lightslategrey'>Light Grey</option>
             </select>
           </div>
-          <div className="mt-6 flex justify-end">
-            {formType === "Update" ? (
+          <div className='mt-6 flex justify-end'>
+            {formType === 'Update' ? (
             <button
-              className="mr-4 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-lg py-2 px-6"
+              className='mr-4 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-lg py-2 px-6'
               onClick={handleUpdateEvent}
               >
               Update
             </button>) : (
               <button
-              className="mr-4 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-lg py-2 px-6"
+              className='mr-4 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-lg py-2 px-6'
               onClick={handleCreateEvent}
             >
               Create
@@ -196,13 +197,13 @@ const CreateEvent = ({dragStart, dragEnd, setDragStart, setDragEnd, showModal, t
       </Modal>
       <Modal
         isOpen={errorOpen}
-        className="z-50 fixed inset-0 overflow-auto bg-opacity-65 bg-gray-900 flex justify-center items-center"
-        overlayClassName="z-40 fixed inset-0 bg-gray-800 bg-opacity-25"
+        className='z-50 fixed inset-0 overflow-auto bg-opacity-65 bg-gray-900 flex justify-center items-center'
+        overlayClassName='z-40 fixed inset-0 bg-gray-800 bg-opacity-25'
       >
-        <div className="bg-white rounded-lg px-8 py-6">
-          <div className="mt-1 flex justify-end">
+        <div className='bg-white rounded-lg px-8 py-6'>
+          <div className='mt-1 flex justify-end'>
           <button
-              className="bg-red-400 hover:bg-gray-500 text-white font-semibold rounded-lg py-1 px-3"
+              className='bg-red-400 hover:bg-gray-500 text-white font-semibold rounded-lg py-1 px-3'
               onClick={() => {
                 setDateError(false);
                 toggleError();
@@ -211,8 +212,8 @@ const CreateEvent = ({dragStart, dragEnd, setDragStart, setDragEnd, showModal, t
             ✗
           </button>
           </div>
-          <h2 className="text-lg font-semibold mb-4 text-danger">Something went wrong!</h2>
-          <div className="flex flex-col gap-1">
+          <h2 className='text-lg font-semibold mb-4 text-danger'>Something went wrong!</h2>
+          <div className='flex flex-col gap-1'>
           {dateError ? (<p><strong>Start Time</strong> must be before <strong>End Time</strong>. Please close this message and try again.</p>) : 
           (<p><strong>Title</strong>, <strong>Start Time</strong>, and <strong>End Time</strong> are all required fields. Please close this message and try again.</p>)}
           </div>
