@@ -65,67 +65,67 @@ function CalendarContainer({ ...props }) {
     );
     const eventPropGetter = useCallback(
         (event, start, end) => ({
-          ...(event.color === "lightgreen" && {
-            style: {
-              backgroundColor: 'lightgreen',
-              border: '2px solid darkgreen',
-              color: 'white',
-              fontWeight: 'bold',
-              fontSize: '16px',
-            },
-          }),
-          ...(event.color === "lightblue" && {
-            style: {
-              backgroundColor: 'lightblue',
-              border: '2px solid darkblue',
-              color: 'white',
-              fontWeight: 'bold',
-              fontSize: '16px',
-            },
-          }),
-          ...(event.color === "lightpink" && {
-            style: {
-              backgroundColor: 'lightpink',
-              border: '2px solid darkred',
-              color: 'white',
-              fontWeight: 'bold',
-              fontSize: '16px',
-            },
-          }),
-          ...(event.color === "lightsalmon" && {
-            style: {
-              backgroundColor: 'lightsalmon',
-              border: '2px solid darkred',
-              color: 'white',
-              fontWeight: 'bold',
-              fontSize: '16px',
-            },
-          }),
-          ...(event.color === "lightcoral" && {
-            style: {
-              backgroundColor: 'lightcoral',
-              border: '2px solid darkred',
-              color: 'white',
-              fontWeight: 'bold',
-              fontSize: '16px',
-            },
-          }),
-          ...(event.color === "lightslategrey" && {
-            style: {
-              backgroundColor: 'lightslategrey',
-              border: '2px solid black',
-              color: 'white',
-              fontWeight: 'bold',
-              fontSize: '16px',
-            },
-          }),
+            ...(event.color === "lightgreen" && {
+                style: {
+                    backgroundColor: 'lightgreen',
+                    border: '2px solid darkgreen',
+                    color: 'white',
+                    fontWeight: 'bold',
+                    fontSize: '16px',
+                },
+            }),
+            ...(event.color === "lightblue" && {
+                style: {
+                    backgroundColor: 'lightblue',
+                    border: '2px solid darkblue',
+                    color: 'white',
+                    fontWeight: 'bold',
+                    fontSize: '16px',
+                },
+            }),
+            ...(event.color === "lightpink" && {
+                style: {
+                    backgroundColor: 'lightpink',
+                    border: '2px solid darkred',
+                    color: 'white',
+                    fontWeight: 'bold',
+                    fontSize: '16px',
+                },
+            }),
+            ...(event.color === "lightsalmon" && {
+                style: {
+                    backgroundColor: 'lightsalmon',
+                    border: '2px solid darkred',
+                    color: 'white',
+                    fontWeight: 'bold',
+                    fontSize: '16px',
+                },
+            }),
+            ...(event.color === "lightcoral" && {
+                style: {
+                    backgroundColor: 'lightcoral',
+                    border: '2px solid darkred',
+                    color: 'white',
+                    fontWeight: 'bold',
+                    fontSize: '16px',
+                },
+            }),
+            ...(event.color === "lightslategrey" && {
+                style: {
+                    backgroundColor: 'lightslategrey',
+                    border: '2px solid black',
+                    color: 'white',
+                    fontWeight: 'bold',
+                    fontSize: '16px',
+                },
+            }),
         }),
         []
-      );
-        
-    let email = '';
+    );
 
-    if (Auth.loggedIn()) {
+    let email = '';
+    const loggedIn = Auth.loggedIn()
+    if (loggedIn) {
         const user = Auth.getProfile()
         email = user.data.email;
     }
@@ -147,14 +147,13 @@ function CalendarContainer({ ...props }) {
     const [selectedEvent, setSelectedEvent] = useState({});
     const [showDetails, setShowDetails] = useState();
     const [eventDetailsEvent, setEventDetailsEvent] = useState({});
-    const [formType, setFormType] = useState(); 
+    const [formType, setFormType] = useState();
     const formatDate = (date) => dayjs.utc(date).local().format().slice(0, 19)
 
     const handleSelectSlot = useCallback(
         ({ start, end }) => {
             start = formatDate(start);
             end = formatDate(end);
-            console.log(end);
             setDragStart(start);
             setDragEnd(end);
             setShowModal(true);
@@ -171,8 +170,7 @@ function CalendarContainer({ ...props }) {
             try {
                 start = formatDate(start);
                 end = formatDate(end);
-                const response = await updateEvent({ variables: { eventId: event._id, ...event, start: start, end: end } });
-                console.log('response: ', response);
+                await updateEvent({ variables: { eventId: event._id, ...event, start: start, end: end } });
                 refetch();
             } catch (error) {
                 console.error(error);
@@ -186,8 +184,7 @@ function CalendarContainer({ ...props }) {
             try {
                 start = formatDate(start);
                 end = formatDate(end);
-                const response = await updateEvent({ variables: { eventId: event._id, ...event, start: start, end: end } });
-                console.log('response: ', response);
+                await updateEvent({ variables: { eventId: event._id, ...event, start: start, end: end } });
                 refetch();
             } catch (error) {
                 console.error(error);
@@ -204,6 +201,10 @@ function CalendarContainer({ ...props }) {
     );
 
     const passEventToUpdateForm = (event) => {
+        let {start, end} = event;
+        start = formatDate(start);
+        end = formatDate(end);
+        event = {...event, start: start, end: end};
         setEventDetailsEvent(event);
         setShowDetails(false);
         setShowModal(true);
@@ -218,47 +219,59 @@ function CalendarContainer({ ...props }) {
     };
 
     return (
-        <div className="mt-2" {...props}>
-            <CreateEvent
-                showModal={showModal}
-                toggleModal={toggleModal}
-                dragStart={dragStart}
-                dragEnd={dragEnd}
-                eventDetailsEvent={eventDetailsEvent}
-                setEventDetailsEvent={setEventDetailsEvent}
-                formatDate={formatDate}
-                formType={formType}
-                setFormType={setFormType}
-            />
-            <EventDetails
-                //   onEventDetail={handleEventDetail}
-                showDetails={showDetails}
-                toggleDetails={toggleDetails}
-                selectedEvent={selectedEvent}
-                passEventToUpdateForm={passEventToUpdateForm}
-                formatDate={formatDate}
-                refetch={refetch}
-                setFormType={setFormType}
-            />
-            <DragAndDropCalendar
-                localizer={localizer}
-                components={components}
-                views={views}
-                formats={formats}
-                events={events}
-                style={{ height: 800 }}
-                selectable
-                onSelectEvent={handleSelectEvent}
-                onSelectSlot={handleSelectSlot}
-                step={15}
-                timeslots={4}
-                startAccessor={(event) => { return new Date(event.start) }}
-                endAccessor={(event) => { return new Date(event.end) }}
-                onEventDrop={moveEvent}
-                onEventResize={resizeEvent}
-                eventPropGetter={eventPropGetter}
-            />
-        </div>
+        <>
+        {loggedIn ? (
+                <div className="mt-2" {...props}>
+                    <CreateEvent
+                        showModal={showModal}
+                        toggleModal={toggleModal}
+                        dragStart={dragStart}
+                        dragEnd={dragEnd}
+                        eventDetailsEvent={eventDetailsEvent}
+                        setEventDetailsEvent={setEventDetailsEvent}
+                        formatDate={formatDate}
+                        formType={formType}
+                        setFormType={setFormType}
+                        refetch={refetch}
+                        setDragStart={setDragStart}
+                        setDragEnd={setDragEnd}
+                    />
+                    <EventDetails
+                        //   onEventDetail={handleEventDetail}
+                        showDetails={showDetails}
+                        toggleDetails={toggleDetails}
+                        selectedEvent={selectedEvent}
+                        passEventToUpdateForm={passEventToUpdateForm}
+                        formatDate={formatDate}
+                        refetch={refetch}
+                        setFormType={setFormType}
+                    />
+                    <DragAndDropCalendar
+                        localizer={localizer}
+                        components={components}
+                        views={views}
+                        formats={formats}
+                        events={events}
+                        style={{ height: 800 }}
+                        selectable
+                        onSelectEvent={handleSelectEvent}
+                        onSelectSlot={handleSelectSlot}
+                        step={15}
+                        timeslots={4}
+                        startAccessor={(event) => { return new Date(event.start) }}
+                        endAccessor={(event) => { return new Date(event.end) }}
+                        onEventDrop={moveEvent}
+                        onEventResize={resizeEvent}
+                        eventPropGetter={eventPropGetter}
+                    />
+                </div>
+            ) : (
+                <div>
+                    Please log in to view your Calendar
+                </div>
+            )
+        }
+        </>
     )
 }
 

@@ -5,31 +5,23 @@ import Modal from 'react-modal';
 
 Modal.setAppElement('#root');
 
-const CreateEvent = ({dragStart, dragEnd, showModal, toggleModal, eventDetailsEvent, setEventDetailsEvent, formatDate, refetch, formType, setFormType}) => {
+const CreateEvent = ({dragStart, dragEnd, setDragStart, setDragEnd, showModal, toggleModal, eventDetailsEvent, setEventDetailsEvent, refetch, formType, setFormType}) => {
   const [isOpen, setIsOpen] = useState(showModal);
-  
-   let {title, start, end, description, location, allDay, color} = { ...eventDetailsEvent};
-
-   start = formatDate(start);
-   end = formatDate(end);
-   eventDetailsEvent = {...eventDetailsEvent, start: start, end: end};
-
+  const [eventData, setEventData] = useState({})
+    
   useEffect(() => {
       setIsOpen(showModal);
   }, [showModal])
 
   const [addEvent] = useMutation(ADD_EVENT)
   
-  const [eventData, setEventData] = useState({title: title || '', start: start || dragStart || '', end: end || dragEnd || '', description: description || '', location: location || '', allDay: allDay || false, color: color || ''});
+  useEffect(() => {
+    setEventData(eventDetailsEvent)
+  }, [eventDetailsEvent])
 
   useEffect(() => {
-    setEventData({...eventData, ...eventDetailsEvent})
-  }, [])
-
-  // useEffect(() => {
-  //   setEventData({...eventData, start: dragStart, end: dragEnd})
-  // }, [dragStart, dragEnd])
-
+    setEventData({start: dragStart, end: dragEnd})
+  }, [dragStart, dragEnd])
   
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -37,6 +29,8 @@ const CreateEvent = ({dragStart, dragEnd, showModal, toggleModal, eventDetailsEv
   };
 
   const handleOpenModal = () => {
+    setDragStart('');
+    setDragEnd('');
     toggleModal();
   };
 
@@ -46,12 +40,10 @@ const CreateEvent = ({dragStart, dragEnd, showModal, toggleModal, eventDetailsEv
  
   const handleCreateEvent = async () => {
     try {
-      const response = await addEvent({ variables: eventData });   
-      console.log('response: ', response);
+      await addEvent({ variables: eventData });   
+      toggleModal();
+      refetch();
       clearForm();
-      setIsOpen(false);
-      refetch()
-      // setShowModal(false);
     } catch (error) {
       console.error(error);
     }
@@ -61,12 +53,11 @@ const CreateEvent = ({dragStart, dragEnd, showModal, toggleModal, eventDetailsEv
 
   const handleUpdateEvent = async () => {
     try {
-      const response = await updateEvent ({ variables: {eventId: eventDetailsEvent._id, ...eventData} });
-      console.log('response: ', response);
-      setFormType('');
-      refetch();
-      clearForm();
+      await updateEvent ({ variables: {eventId: eventDetailsEvent._id, ...eventData} });
       toggleModal();
+      refetch();
+      setFormType('');
+      clearForm();
     } catch (error) {
       console.error(error);
     }
@@ -76,6 +67,8 @@ const CreateEvent = ({dragStart, dragEnd, showModal, toggleModal, eventDetailsEv
     setFormType('');
     setEventData({ title: '', start: '', end: '', description: '', location: '', allDay: false, color: '' });
     setEventDetailsEvent({ title: '', start: '', end: '', description: '', location: '', allDay: false, color: '' });
+    setDragStart('');
+    setDragEnd('');
   }
 
   return (
