@@ -20,7 +20,7 @@ const CreateEvent = ({dragStart, dragEnd, setDragStart, setDragEnd, showModal, t
   }, [eventDetailsEvent])
 
   useEffect(() => {
-    setEventData({start: dragStart, end: dragEnd})
+    setEventData({start: dragStart, end: dragEnd, title: '', location: '', description: ''})
   }, [dragStart, dragEnd])
   
   const handleInputChange = (e) => {
