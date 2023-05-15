@@ -17,8 +17,8 @@ import Auth from '../utils/auth';
 
 import { useQuery } from '@apollo/client';
 import { QUERY_EVENTS } from '../utils/queries';
-import { useMutation } from '@apollo/client'
-import { UPDATE_EVENT } from '../utils/mutations'
+import { useMutation } from '@apollo/client';
+import { UPDATE_EVENT } from '../utils/mutations';
 
 const DragAndDropCalendar = withDragAndDrop(Calendar);
 
@@ -34,6 +34,7 @@ const ColoredDateCellWrapper = ({ children }) =>
         },
     });
 
+// ----- MAIN CONTAINER COMPONENT ----- //
 function CalendarContainer({ ...props }) {
     const { components, views, formats } = useMemo(
         () => ({
@@ -41,6 +42,7 @@ function CalendarContainer({ ...props }) {
                 timeSlotWrapper: ColoredDateCellWrapper,
             },
             views: Object.keys(Views).map((k) => Views[k]),
+            // all date display formatting across app
             formats: {
                 dateFormat: (date, culture, localizer) =>
                     localizer.format(date, 'D', culture),
@@ -66,7 +68,9 @@ function CalendarContainer({ ...props }) {
         }),
         []
     );
+
     const eventPropGetter = useCallback(
+        // this is the function we use to change the color of events
         (event) => ({
             ...(event.color === 'lightgreen' && {
                 style: {
@@ -126,13 +130,15 @@ function CalendarContainer({ ...props }) {
         []
     );
 
+    // This section pulls the logged in user's email address from their token
     let email = '';
-    const loggedIn = Auth.loggedIn()
+    const loggedIn = Auth.loggedIn();
     if (loggedIn) {
-        const user = Auth.getProfile()
+        const user = Auth.getProfile();
         email = user.data.email;
     }
 
+    // This section is where we set the main events prop for the calendar by using the data stored in the database. This is accessed through a query.
     const [events, setEvents] = useState([]);
     const { data, refetch } = useQuery(QUERY_EVENTS, {
         variables: { email: email },
@@ -142,8 +148,9 @@ function CalendarContainer({ ...props }) {
         if (data && data.getEvents) {
             setEvents(data.getEvents.events)
         }
-    }, [data])
+    }, [data]);
 
+    // Initialization of all state variables
     const [dragStart, setDragStart] = useState();
     const [dragEnd, setDragEnd] = useState();
     const [showModal, setShowModal] = useState();
@@ -151,8 +158,11 @@ function CalendarContainer({ ...props }) {
     const [showDetails, setShowDetails] = useState();
     const [eventDetailsEvent, setEventDetailsEvent] = useState({});
     const [formType, setFormType] = useState();
-    const formatDate = (date) => dayjs.utc(date).local().format().slice(0, 19)
 
+    // This function gets the accurate time for the user's local timezone and slices off the timezone offset from the date string
+    const formatDate = (date) => dayjs.utc(date).local().format().slice(0, 19);
+
+    // This function pulls the start and end time when a user uses the drag feature to trigger the create event modal. Dates are reformatted before they are sent to the Modal so that they prepopulate properly.
     const handleSelectSlot = useCallback(
         ({ start, end }) => {
             start = formatDate(start);
@@ -162,46 +172,50 @@ function CalendarContainer({ ...props }) {
             setShowModal(true);
         }, []
     );
+    
+    const [updateEvent] = useMutation(UPDATE_EVENT);
 
-    const [updateEvent] = useMutation(UPDATE_EVENT)
+    // This function is called when a user picks up an event and moves it. The event itself, and its new start and end time are accessed and then the updateEvent mutation is called to update the entry in the database.
     const moveEvent = useCallback(
         async ({ event, start, end, isAllDay: droppedOnAllDaySlot = false }) => {
             const { allDay } = event;
             if (!allDay && droppedOnAllDaySlot) {
-                event.allDay = true;
+                event.allDay = true; // future code in place for changing the allDay key when an event is dragged onto an allDay slot
             }
             try {
                 start = formatDate(start);
                 end = formatDate(end);
                 await updateEvent({ variables: { eventId: event._id, ...event, start: start, end: end } });
-                refetch();
+                refetch(); // refetch is called so that the database is queried again to get the freshest data
             } catch (error) {
                 console.error(error);
             }
-
         }, []
     );
-
+    
+    // This function is called when a user resizes an event. The event itself, and its new start and end time are accessed and then the updateEvent mutation is called to update the entry in the database.
     const resizeEvent = useCallback(
         async ({ event, start, end }) => {
             try {
                 start = formatDate(start);
                 end = formatDate(end);
                 await updateEvent({ variables: { eventId: event._id, ...event, start: start, end: end } });
-                refetch();
+                refetch(); // refetch is called so that the database is queried again to get the freshest data
             } catch (error) {
                 console.error(error);
             }
         }, []
     );
 
+    // This is the function that is called when a user clicks on an event. It stores the event that was clicked on and then toggles on the EventDetails modal
     const handleSelectEvent = useCallback(
         (event) => {
-            setSelectedEvent(event)
+            setSelectedEvent(event);
             setShowDetails(true);
         }, []
     );
-
+    
+    // This function is passed as a prop into the EventDetails component. When a user clicks on the "Edit" button, the event that is displayed on the EventDetails modal is sent to this function, which then reformats the dates and sends that event to the CreateEvent component. It also closes the EventDetails modal and opens the CreateEvent modal.
     const passEventToUpdateForm = (event) => {
         let {start, end} = event;
         start = formatDate(start);
@@ -212,10 +226,10 @@ function CalendarContainer({ ...props }) {
         setShowModal(true);
     };
 
+    // Toggle functions used to open and close the modals
     const toggleModal = () => {
         setShowModal(!showModal)
     };
-
     const toggleDetails = () => {
         setShowDetails(!showDetails)
     };
@@ -267,6 +281,7 @@ function CalendarContainer({ ...props }) {
                 </div>
             ) : (
                 <div>
+                    {/*Conditional Rendering so that calendar does not appear unless a user is logged in*/}
                     Please log in to view your Calendar
                 </div>
             )

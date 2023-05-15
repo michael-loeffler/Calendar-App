@@ -5,7 +5,8 @@ import Modal from 'react-modal';
 
 Modal.setAppElement('#root');
 
-const CreateEvent = ({dragStart, dragEnd, setDragStart, setDragEnd, showModal, toggleModal, eventDetailsEvent, setEventDetailsEvent, refetch, formType, setFormType}) => {
+const CreateEvent = ({showModal, toggleModal, dragStart, dragEnd, setDragStart, setDragEnd, eventDetailsEvent, setEventDetailsEvent, formType, setFormType, refetch }) => {
+  // initialization of state variables
   const [isOpen, setIsOpen] = useState(showModal);
   const [eventData, setEventData] = useState({});
   const [errorOpen, setErrorOpen] = useState(false)
@@ -13,17 +14,19 @@ const CreateEvent = ({dragStart, dragEnd, setDragStart, setDragEnd, showModal, t
     
   useEffect(() => {
       setIsOpen(showModal);
-  }, [showModal])
+  }, [showModal]);
 
-  
+  // whenever eventDetailsEvent changes, its value is set as eventData. This is what makes the prepopulation possible.
   useEffect(() => {
     setEventData(eventDetailsEvent)
-  }, [eventDetailsEvent])
+  }, [eventDetailsEvent]);
   
+  // whenever dragStart and dragEnd change, their values are set as eventData. This is what makes the prepopulation possible.
   useEffect(() => {
     setEventData({start: dragStart, end: dragEnd, title: '', location: '', description: ''})
-  }, [dragStart, dragEnd])
+  }, [dragStart, dragEnd]);
   
+  // responsible for accepting the user's input into the form and setting its value to eventData object
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setEventData({ ...eventData, [name]: value});
@@ -35,16 +38,14 @@ const CreateEvent = ({dragStart, dragEnd, setDragStart, setDragEnd, showModal, t
     toggleModal();
   };
   
-  const handleCloseModal = () => {
-    setIsOpen(false);
-  };
-  
-  const [addEvent] = useMutation(ADD_EVENT);
+  // This function is called when the user clicks on the create button. The function checks to make sure the start time begins before the end time, and if not, toggles on the error modal for date errors. If we get past that check, the addEvent mutation is called which checks to make sure all required fields have data entered in them. If not, an error is thrown and the error modal is toggled on. 
 
+  // After successful creates, the modal is closed, the database query is refetched, and the form is cleared.
+  const [addEvent] = useMutation(ADD_EVENT);
   const handleCreateEvent = async () => {
     try {
       if (eventData.end < eventData.start) {
-        setDateError(true);
+        setDateError(true); // this is the variable used to conditionally render the correct error message
         toggleError();
       }
       await addEvent({ variables: eventData });   
@@ -57,8 +58,10 @@ const CreateEvent = ({dragStart, dragEnd, setDragStart, setDragEnd, showModal, t
     }
   };
 
+  // This function is called when the user clicks on the update button. The function checks to make sure the start time begins before the end time, and if not, toggles on the error modal for date errors. If we get past that check, the updateEvent mutation is called which checks to make sure all required fields have data entered in them (these checks take place in server/schemas/resolvers). If not, an error is thrown and the error modal is toggled on.
+  
+  // After successful updates, the modal is closed, the database query is refetched, the formType variable (used to conditionally render this file to either be a Create Event or Update Event modal) is reset, and the form is cleared.
   const [updateEvent] = useMutation (UPDATE_EVENT);
-
   const handleUpdateEvent = async () => {
     try {
       if (eventData.end < eventData.start) {
@@ -74,16 +77,18 @@ const CreateEvent = ({dragStart, dragEnd, setDragStart, setDragEnd, showModal, t
       console.error(error);
       toggleError();
     }
-  }
+  };
 
+  // This function resets all state variables that could possibly impact a subsequent call of this modal. This ensures no undesired data persistence occurs as a user moves from one action to another
   const clearForm = () => {
     setFormType('');
     setEventData({ title: '', start: '', end: '', description: '', location: '', allDay: false, color: '' });
     setEventDetailsEvent({ title: '', start: '', end: '', description: '', location: '', allDay: false, color: '' });
     setDragStart('');
     setDragEnd('');
-  }
+  };
 
+  // Toggle function used to open and close the Error modal
   const toggleError = () => {
     setErrorOpen(!errorOpen)
   }
@@ -96,10 +101,10 @@ const CreateEvent = ({dragStart, dragEnd, setDragStart, setDragEnd, showModal, t
         onClick={handleOpenModal}
       >
         Create Event
+        {/* The button in the upper left hand corner of the page */}
       </button>
       <Modal
         isOpen={isOpen}
-        // onRequestClose={handleCloseModal}
         className='z-50 fixed inset-0 overflow-auto bg-opacity-40 bg-gray-900 flex justify-center items-center'
         overlayClassName='z-40 fixed inset-0 bg-gray-800 bg-opacity-25'
       >
@@ -113,8 +118,10 @@ const CreateEvent = ({dragStart, dragEnd, setDragStart, setDragEnd, showModal, t
               }}
             >
             ✗
+             {/* The X button for the Create/Update modal */}
           </button>
           </div>
+           {/* Conditionally renders the Title of the Modal depending on what action the user is taking*/}
           {formType === 'Update' ? (
           <h2 className='text-lg font-semibold mb-4'>Update Event</h2>)
            : ( <h2 className='text-lg font-semibold mb-4'>Create Event</h2> )}
@@ -178,6 +185,7 @@ const CreateEvent = ({dragStart, dragEnd, setDragStart, setDragEnd, showModal, t
             </select>
           </div>
           <div className='mt-6 flex justify-end'>
+            {/* Conditionally renders the button at the bottom of the Modal to either say Update or Create based on the action that the user is taking. Also, updates the function associated with the onClick event for the button, directing the information to the correct sequence of actions */}
             {formType === 'Update' ? (
             <button
               className='mr-4 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-lg py-2 px-6'
@@ -195,6 +203,7 @@ const CreateEvent = ({dragStart, dragEnd, setDragStart, setDragEnd, showModal, t
           </div>
         </div>
       </Modal>
+      {/* Error Message Modal */}
       <Modal
         isOpen={errorOpen}
         className='z-50 fixed inset-0 overflow-auto bg-opacity-65 bg-gray-900 flex justify-center items-center'
@@ -214,6 +223,7 @@ const CreateEvent = ({dragStart, dragEnd, setDragStart, setDragEnd, showModal, t
           </div>
           <h2 className='text-lg font-semibold mb-4 text-danger'>Something went wrong!</h2>
           <div className='flex flex-col gap-1'>
+          {/* Conditionally renders the error message based on the type of error  */}
           {dateError ? (<p><strong>Start Time</strong> must be before <strong>End Time</strong>. Please close this message and try again.</p>) : 
           (<p><strong>Title</strong>, <strong>Start Time</strong>, and <strong>End Time</strong> are all required fields. Please close this message and try again.</p>)}
           </div>
