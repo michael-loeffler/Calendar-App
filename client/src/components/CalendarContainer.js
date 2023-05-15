@@ -192,9 +192,8 @@ function CalendarContainer({ ...props }) {
             } catch (error) {
                 console.error(error);
             }
-        },
-        []
-    )
+        }, []
+    );
 
     const handleSelectEvent = useCallback(
         (event) => {
@@ -229,6 +228,7 @@ function CalendarContainer({ ...props }) {
                 formatDate={formatDate}
                 formType={formType}
                 setFormType={setFormType}
+                refetch={refetch}
             />
             <EventDetails
                 //   onEventDetail={handleEventDetail}
