@@ -2,11 +2,10 @@ import React, { useState } from 'react';
 import { Navbar, Nav, Container, Modal, Tab } from 'react-bootstrap';
 import SignUpForm from './SignupForm';
 import LoginForm from './LoginForm';
-
 import Auth from '../utils/auth';
+import '../index';
 
 const AppNavbar = () => {
-  // set modal display state
   const [showModal, setShowModal] = useState(false);
 
   return (
@@ -33,8 +32,8 @@ const AppNavbar = () => {
         size='lg'
         show={showModal}
         onHide={() => setShowModal(false)}
-        aria-labelledby='signup-modal'>
-        {/* tab container to do either signup or login component */}
+        aria-labelledby='signup-modal'
+      >
         <Tab.Container defaultActiveKey='login'>
           <Modal.Header closeButton>
             <Modal.Title id='signup-modal'>
@@ -60,6 +59,8 @@ const AppNavbar = () => {
           </Modal.Body>
         </Tab.Container>
       </Modal>
+
+
     </>
   );
 };
