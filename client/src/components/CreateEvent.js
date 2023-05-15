@@ -29,6 +29,8 @@ const CreateEvent = ({dragStart, dragEnd, setDragStart, setDragEnd, showModal, t
   };
 
   const handleOpenModal = () => {
+    setDragStart('');
+    setDragEnd('');
     toggleModal();
   };
 
@@ -38,12 +40,10 @@ const CreateEvent = ({dragStart, dragEnd, setDragStart, setDragEnd, showModal, t
  
   const handleCreateEvent = async () => {
     try {
-      const response = await addEvent({ variables: eventData });   
-      console.log('response: ', response);
+      await addEvent({ variables: eventData });   
+      toggleModal();
+      refetch();
       clearForm();
-      setIsOpen(false);
-      refetch()
-      // setShowModal(false);
     } catch (error) {
       console.error(error);
     }
@@ -53,12 +53,11 @@ const CreateEvent = ({dragStart, dragEnd, setDragStart, setDragEnd, showModal, t
 
   const handleUpdateEvent = async () => {
     try {
-      const response = await updateEvent ({ variables: {eventId: eventDetailsEvent._id, ...eventData} });
-      console.log('response: ', response);
-      setFormType('');
-      refetch();
-      clearForm();
+      await updateEvent ({ variables: {eventId: eventDetailsEvent._id, ...eventData} });
       toggleModal();
+      refetch();
+      setFormType('');
+      clearForm();
     } catch (error) {
       console.error(error);
     }
@@ -68,6 +67,8 @@ const CreateEvent = ({dragStart, dragEnd, setDragStart, setDragEnd, showModal, t
     setFormType('');
     setEventData({ title: '', start: '', end: '', description: '', location: '', allDay: false, color: '' });
     setEventDetailsEvent({ title: '', start: '', end: '', description: '', location: '', allDay: false, color: '' });
+    setDragStart('');
+    setDragEnd('');
   }
 
   return (
