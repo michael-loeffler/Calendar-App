@@ -9,6 +9,7 @@ const CreateEvent = ({dragStart, dragEnd, setDragStart, setDragEnd, showModal, t
   const [isOpen, setIsOpen] = useState(showModal);
   const [eventData, setEventData] = useState({})
   const [errorOpen, setErrorOpen] = useState(false)
+  const [dateError, setDateError] = useState(false);
     
   useEffect(() => {
       setIsOpen(showModal);
@@ -41,6 +42,10 @@ const CreateEvent = ({dragStart, dragEnd, setDragStart, setDragEnd, showModal, t
  
   const handleCreateEvent = async () => {
     try {
+      if (eventData.end < eventData.start) {
+        setDateError(true);
+        toggleError();
+      }
       await addEvent({ variables: eventData });   
       toggleModal();
       refetch();
@@ -55,6 +60,10 @@ const CreateEvent = ({dragStart, dragEnd, setDragStart, setDragEnd, showModal, t
 
   const handleUpdateEvent = async () => {
     try {
+      if (eventData.end < eventData.start) {
+        setDateError(true);
+        toggleError();
+      }
       await updateEvent ({ variables: {eventId: eventDetailsEvent._id, ...eventData} });
       toggleModal();
       refetch();
@@ -62,6 +71,7 @@ const CreateEvent = ({dragStart, dragEnd, setDragStart, setDragEnd, showModal, t
       clearForm();
     } catch (error) {
       console.error(error);
+      toggleError();
     }
   }
 
@@ -194,6 +204,7 @@ const CreateEvent = ({dragStart, dragEnd, setDragStart, setDragEnd, showModal, t
           <button
               className="bg-red-400 hover:bg-gray-500 text-white font-semibold rounded-lg py-1 px-3"
               onClick={() => {
+                setDateError(false);
                 toggleError();
               }}
             >
@@ -202,7 +213,8 @@ const CreateEvent = ({dragStart, dragEnd, setDragStart, setDragEnd, showModal, t
           </div>
           <h2 className="text-lg font-semibold mb-4 text-danger">Something went wrong!</h2>
           <div className="flex flex-col gap-1">
-            <p>Title, Start Time, and End Time are all required fields. Please close this message and try again.</p>
+          {dateError ? (<p><strong>Start Time</strong> must be before <strong>End Time</strong>. Please close this message and try again.</p>) : 
+          (<p><strong>Title</strong>, <strong>Start Time</strong>, and <strong>End Time</strong> are all required fields. Please close this message and try again.</p>)}
           </div>
         </div>
       </Modal>
