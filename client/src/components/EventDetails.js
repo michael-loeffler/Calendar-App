@@ -29,12 +29,6 @@ const EventDetail = ({selectedEvent, showDetails, passEventToUpdateForm, onClose
     setFormType("Update")
   };
 
-  // const isEmpty = () => {
-  //   const hide = document.getElementById("hide");
-  //   if (hide.length === 0 ) {
-  //     return "display: none;"
-  // };
-
   return (
     <> 
       <Modal

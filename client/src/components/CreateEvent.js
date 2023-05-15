@@ -29,7 +29,6 @@ const CreateEvent = ({dragStart, dragEnd, showModal, toggleModal, eventDetailsEv
   // useEffect(() => {
   //   setEventData({...eventData, start: dragStart, end: dragEnd})
   // }, [dragStart, dragEnd])
-
   
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -83,7 +82,6 @@ const CreateEvent = ({dragStart, dragEnd, showModal, toggleModal, eventDetailsEv
       <button
         className= "createBtn"
         style = {{ background: '#394867', color: 'white', borderRadius: '40px', padding: '14px', marginBottom: '10px', fontWeight: 'bold', hover: 'red'}} 
-        // className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline mb-2"
         onClick={handleOpenModal}
       >
         Create Event
@@ -183,15 +181,6 @@ const CreateEvent = ({dragStart, dragEnd, showModal, toggleModal, eventDetailsEv
               Create
             </button>
             )}
-            {/* <button
-              className="bg-gray-400 hover:bg-gray-500 text-white font-semibold rounded-lg py-2 px-6"
-             onClick={() => {
-                toggleModal();
-                clearForm();
-              }}
-            >
-              Cancel
-            </button> */}
           </div>
         </div>
       </Modal>
