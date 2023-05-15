@@ -2,39 +2,57 @@ import React, { useState } from 'react';
 import { Navbar, Nav, Container, Modal, Tab } from 'react-bootstrap';
 import SignUpForm from './SignupForm';
 import LoginForm from './LoginForm';
-
 import Auth from '../utils/auth';
 
 const AppNavbar = () => {
-  // set modal display state
   const [showModal, setShowModal] = useState(false);
 
   return (
     <>
-      <Navbar bg='' variant='muted' expand='lg' className='mb-3' style={{background: '#A8E5F9',fontSize: '18px', fontWeight: 'bold', color: 'white', textShadow: 'black', borderBottom: '1px solid black'}}>
-  <Container fluid>
-    <Navbar.Toggle aria-controls='navbar' />
-    <Navbar.Collapse id='navbar'>
-      <Nav className='ml-auto'>
-        {/* if user is logged in show saved books and logout */}
-        {Auth.loggedIn() ? (
-          <>
-            <Nav.Link onClick={Auth.logout} style={{border: '2px solid black', borderRadius: '40px', background: '#DFE1E1' }}>Logout</Nav.Link>
-          </>
-        ) : (
-          <Nav.Link onClick={() => setShowModal(true)} style={{border: '2px solid black', borderRadius: '40px', background: '#DFE1E1' }}>Login/Sign Up</Nav.Link>
-        )}
-      </Nav>
-    </Navbar.Collapse>
-  </Container>
-</Navbar>
-      {/* set modal data up */}
+      <Navbar
+        bg=''
+        variant='muted'
+        expand='lg'
+        className='mb-3'
+        style={{
+          background: '#A8E5F9',
+          fontSize: '18px',
+          fontWeight: 'bold',
+          color: 'white',
+          textShadow: 'black',
+          borderBottom: '1px solid black'
+        }}
+      >
+        <Container fluid>
+          <Navbar.Toggle aria-controls='navbar' />
+          <Navbar.Collapse id='navbar'>
+            <Nav className='ml-auto'>
+              {Auth.loggedIn() ? (
+                <Nav.Link
+                  onClick={Auth.logout}
+                  className='rounded-full px-3 py-1 bg-gray-200 border-2 border-black hover:bg-gray-300 transition-all duration-300'
+                >
+                  Logout
+                </Nav.Link>
+              ) : (
+                <Nav.Link
+                  onClick={() => setShowModal(true)}
+                  className='rounded-full px-3 py-1 bg-gray-200 border-2 border-black hover:bg-gray-300 transition-all duration-300'
+                >
+                  Login/Sign Up
+                </Nav.Link>
+              )}
+            </Nav>
+          </Navbar.Collapse>
+        </Container>
+      </Navbar>
+
       <Modal
         size='lg'
         show={showModal}
         onHide={() => setShowModal(false)}
-        aria-labelledby='signup-modal'>
-        {/* tab container to do either signup or login component */}
+        aria-labelledby='signup-modal'
+      >
         <Tab.Container defaultActiveKey='login'>
           <Modal.Header closeButton>
             <Modal.Title id='signup-modal'>
@@ -60,6 +78,22 @@ const AppNavbar = () => {
           </Modal.Body>
         </Tab.Container>
       </Modal>
+
+      <style jsx>{`
+        @media (max-width: 1024px) {
+          .navbar-nav {
+            width: 100%;
+            margin-top: 0.5rem;
+            text-align: center;
+            font-size: 20px
+          }
+
+          .navbar-nav .nav-link {
+            border-radius: 0;
+            width: 100%;
+          }
+        }
+      `}</style>
     </>
   );
 };

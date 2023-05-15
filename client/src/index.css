@@ -3,3 +3,119 @@
 @import 'tailwindcss/components';
 
 @import 'tailwindcss/utilities';
+
+body {
+    /* background-image: url("https://e0.pxfuel.com/wallpapers/591/208/desktop-wallpaper-cherry-blossom-1440p-resolution-flowers-2560x1440-cherry-blossom.jpg"); */
+    background-repeat: no-repeat;
+    background-size: cover;
+
+}
+
+.rbc-toolbar-label {
+    font-weight: bold;
+    font-size: 25px;
+    /* background-image: url("https://source.unsplash.com/100x100/?flowers"); */
+    color: black;
+
+}
+.rbc-row{
+    line-height: 2em;
+    font-size: 1.3em;
+}
+.rbc-row + .rbc-row{
+    display: none !important;
+}
+/* .rbc-allday-cell{
+    display: none !important;
+} */
+
+@media screen and (max-width: 1024
+) {
+    .rbc-time-gutter{
+        width: 14% !important;
+        font-size: .7em !important;
+    }
+    .rbc-header button {
+        font-size: 1em;
+    }
+    .rbc-toolbar .rbc-btn-group + .rbc-btn-group {
+        margin-left: auto;
+        margin-right: auto;
+        overflow-x: hidden;
+        width: 10%;
+    }
+    .rbc-time-view{
+       font-size: 1em !important;
+        
+    }
+    .rbc-toolbar button {
+        margin-top: 5px !important;
+    }
+
+
+    .rbc-toolbar-label {
+        font-weight: bold;
+        font-size: 25px;
+
+    }
+    .rbc-time-gutter{
+        width: 14%;
+        font-size: .7em;
+    }
+    .rbc-label{
+        width: 14%;
+    }
+  }
+@media screen and (max-width: 767px) {
+    .rbc-row{
+        line-height: 1em;
+        font-size: 1.3em;
+    }
+    .rbc-row + .rbc-row{
+        display: none !important;
+    }
+    .rbc-btn-group{
+        font-size: .78em;
+    }
+    .rbc-toolbar-label{
+        font-size: 1em;
+    }
+    .rbc-header button {
+        font-size: .7em;
+    }
+    .rbc-month-view {
+        width: 100%;
+    }
+    .rbc-week-row{
+        width: 100%;
+    }
+    .rbc-row-bg{
+        width: 100%;
+    }
+    .rbc-time-gutter{
+        width: 14%;
+        font-size: .7em;
+    }
+    .rbc-time-view{
+        width: 106% !important;
+    }
+    .rbc-label{
+        width: 14% !important;
+    }
+    .rbc-header{
+        white-space: normal !important;
+    }
+    .rbc-day-slot.rbc-time-column.rbc-now.rbc-today{
+        width: 94%;
+    }
+    #root > div > div > div.rbc-time-view > div.rbc-time-content{
+        width: 94%;
+    }
+    .rbc-header.rbc-today {
+        width: 94%;
+    }
+    .rbc-header{
+        width: 85%;
+        
+    }
+}

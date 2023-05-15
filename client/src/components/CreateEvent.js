@@ -67,7 +67,7 @@ const CreateEvent = ({dragStart, dragEnd, onCreateEvent, showModal, onClose, tog
       <Modal
         isOpen={isOpen}
         onRequestClose={handleCloseModal}
-        className="z-50 fixed inset-0 overflow-auto bg-opacity-80 bg-gray-900 flex justify-center items-center"
+        className="z-50 fixed inset-0 overflow-auto bg-opacity-80 bg-gray-900 flex justify-center items-center "
         overlayClassName="z-40 fixed inset-0 bg-gray-800 bg-opacity-75"
       >
         <div className="bg-white rounded-lg px-8 py-6">
@@ -118,8 +118,8 @@ const CreateEvent = ({dragStart, dragEnd, onCreateEvent, showModal, onClose, tog
             />
           </div>
           <div className="form-group">
-            <label>Color</label>
-            <select name="color" value={eventData.color} onChange={handleInputChange}>
+            <label>Color:</label>
+            <select name="color" value={eventData.color} onChange={handleInputChange} style={{ marginTop: '20px' }}>
               <option value="">Select a color</option>
               <option value="lightblue">Light Blue</option>
               <option value="lightgreen">Light Green</option>

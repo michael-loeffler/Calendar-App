@@ -16,6 +16,7 @@ import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
 import 'react-big-calendar/lib/addons/dragAndDrop/styles.css'
 import { useMutation } from '@apollo/client'
 import { UPDATE_EVENT } from '../utils/mutations'
+import '../index'
 
 const DragAndDropCalendar = withDragAndDrop(Calendar);
 
@@ -269,5 +270,7 @@ function CalendarContainer({ ...props }) {
         </div>
     )
 }
+
+
 
 export default CalendarContainer;
