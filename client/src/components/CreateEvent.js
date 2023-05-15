@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useMutation } from '@apollo/client'
 import { ADD_EVENT, UPDATE_EVENT } from '../utils/mutations'
 import Modal from 'react-modal';
+import '../index';
 
 Modal.setAppElement('#root');
 
@@ -165,15 +166,15 @@ const CreateEvent = ({dragStart, dragEnd, setDragStart, setDragEnd, showModal, t
             />
           </div>
           <div className="form-group">
-            <label>Color</label>
-            <select name="color" value={eventData.color} onChange={handleInputChange}>
+            <label>Color:</label>
+            <select name="color" value={eventData.color} onChange={handleInputChange} style={{ marginTop: '20px' }}>
               <option value="">Select a color</option>
-              <option value="lightblue">Light Blue</option>
-              <option value="lightgreen">Light Green</option>
-              <option value="lightpink">Light Pink</option>
-              <option value="lightsalmon">Light Salmon</option>
-              <option value="lightcoral">Light Coral</option>
-              <option value="lightslategrey">Light Grey</option>
+              <option value="lightblue">Blue</option>
+              <option value="lightgreen">Green</option>
+              <option value="lightpink">Pink</option>
+              <option value="lightsalmon">Salmon</option>
+              <option value="lightcoral">Coral</option>
+              <option value="lightslategrey">Grey</option>
             </select>
           </div>
           <div className="mt-6 flex justify-end">

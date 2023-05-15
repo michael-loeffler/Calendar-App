@@ -3,3 +3,182 @@
 @import 'tailwindcss/components';
 
 @import 'tailwindcss/utilities';
+
+/* body {
+    background-image: url("https://e0.pxfuel.com/wallpapers/591/208/desktop-wallpaper-cherry-blossom-1440p-resolution-flowers-2560x1440-cherry-blossom.jpg");
+    background-repeat: no-repeat; 
+    background-size: cover; 
+
+} */
+
+.rbc-toolbar-label {
+    font-weight: bold;
+    font-size: 25px;
+    /* background-image: url("https://source.unsplash.com/100x100/?flowers"); */
+    color: navy;
+
+}
+.rbc-row{
+    line-height: 2em;
+    font-size: 1.3em;
+}
+.rbc-row + .rbc-row{
+    display: none !important;
+}
+/* .rbc-allday-cell{
+    line-height: .1em !important;
+} */
+.form-group select {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  .form-group option {
+    border: 1px solid #ddd;
+    border-top: none;
+    padding: 5px 10px;
+  }
+  
+  .form-group option:first-child {
+    border-top: 1px solid #ddd;
+  }
+
+  .rbc-header{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 4em;
+  }
+
+@media screen and (max-width: 1024
+) {
+    .rbc-time-gutter{
+        width: 14% !important;
+        font-size: .7em !important;
+    }
+    .rbc-header button {
+        font-size: 1em;
+    }
+    .rbc-toolbar .rbc-btn-group + .rbc-btn-group {
+        margin-left: auto;
+        margin-right: auto;
+        overflow-x: hidden;
+        width: 10%;
+    }
+    .rbc-time-view{
+       font-size: 1em !important;
+        
+    }
+    .rbc-toolbar button {
+        margin-top: 5px !important;
+    }
+
+
+    .rbc-toolbar-label {
+        font-weight: bold;
+        font-size: 25px;
+    
+    }
+    .rbc-time-gutter{
+        width: 14%;
+        font-size: .7em;
+    }
+    .rbc-label{
+        width: 14%;
+    }
+  }
+@media screen and (max-width: 767px) {
+    .navbar-nav {
+        width: 100%;
+        margin-top: 0.5rem;
+        text-align: center;
+        font-size: 20px
+      }
+
+      .navbar-nav .nav-link {
+        border-radius: 0;
+        width: 100%;
+      }
+    .rbc-row{
+        line-height: 1em;
+        font-size: 1.3em;
+    }
+    .rbc-row + .rbc-row{
+        display: none !important;
+    }
+    .rbc-btn-group{
+        font-size: .78em;
+    }
+    .rbc-toolbar-label{
+        font-size: 1em;
+    }
+    .rbc-header button {
+        font-size: .7em;
+    }
+    .rbc-month-view {
+        width: 100%;
+    }
+    .rbc-month-header{
+        height: 2em;
+    }
+    .rbc-week-row{
+        width: 100%;
+    }
+    .rbc-row-bg{
+        width: 100%;
+    }
+    .rbc-time-gutter{
+        width: 17%;
+        font-size: .7em;
+    }
+    .rbc-time-view{
+        width: 100% !important;
+
+    }
+    .rbc-label{
+        width: 12% !important;
+    }
+    .rbc-header{
+        white-space: normal !important;
+    }
+    .rbc-day-slot.rbc-time-column.rbc-now.rbc-today{
+        width: 94%;
+    }
+    #root > div > div > div.rbc-time-view > div.rbc-time-content{
+        width: 94%;
+    }
+    .rbc-header.rbc-today {
+        width: 94%;
+        max-height: 4rem;
+        font-size: 18px;
+        
+    }
+    .rbc-header{
+        width: 94%;
+        line-height: 1em;
+    }
+    .rbc-time-header-gutter{
+        width: 14%;
+    }
+    .rbc-time-header-content{
+       width: 100%
+    }
+    #root > div > div > div.rbc-time-view > div.rbc-time-header.rbc-overflowing > div.rbc-time-header-content > div.rbc-allday-cell > div.rbc-row-bg{
+        width: 92% !important;
+        line-height: 1em !important;
+    }
+    #root > div > div > div.rbc-time-view > div.rbc-time-header.rbc-overflowing > div.rbc-time-header-content > div.rbc-allday-cell > div.rbc-row-bg > div.rbc-day-bg.rbc-today{
+        width: 92% !important;
+    }
+    #root > div > div > div.rbc-time-view > div.rbc-time-header.rbc-overflowing > div.rbc-time-header-content > div.rbc-row.rbc-time-header-cell > div.rbc-header.rbc-today{
+        width: 90% !important;
+        line-height: 1.1em;
+    }
+    #root > div > div > div.rbc-time-view > div.rbc-time-header.rbc-overflowing > div.rbc-time-header-content > div.rbc-row.rbc-time-header-cell{
+        width: 92% !important;
+        height: 5em;
+    }
+    .rbc-day-bg + .rbc-day-bg{
+        border: 1px solid #ddd !important;
+    }
+}
