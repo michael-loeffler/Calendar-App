@@ -5,6 +5,7 @@ import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import 'react-big-calendar/lib/addons/dragAndDrop/styles.css';
 import '../index.css';
+import '../index';
 
 import dayjs from 'dayjs';
 import timezone from 'dayjs/plugin/timezone';
@@ -17,12 +18,8 @@ import Auth from '../utils/auth';
 
 import { useQuery } from '@apollo/client';
 import { QUERY_EVENTS } from '../utils/queries';
-import Auth from '../utils/auth';
-import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
-import 'react-big-calendar/lib/addons/dragAndDrop/styles.css'
 import { useMutation } from '@apollo/client'
 import { UPDATE_EVENT } from '../utils/mutations'
-import '../index'
 
 const DragAndDropCalendar = withDragAndDrop(Calendar);
 
@@ -176,7 +173,7 @@ function CalendarContainer({ ...props }) {
             setShowModal(true);
         }, []
     );
-    
+
     const [updateEvent] = useMutation(UPDATE_EVENT);
 
     // This function is called when a user picks up an event and moves it. The event itself, and its new start and end time are accessed and then the updateEvent mutation is called to update the entry in the database.
@@ -196,7 +193,7 @@ function CalendarContainer({ ...props }) {
             }
         }, []
     );
-    
+
     // This function is called when a user resizes an event. The event itself, and its new start and end time are accessed and then the updateEvent mutation is called to update the entry in the database.
     const resizeEvent = useCallback(
         async ({ event, start, end }) => {
@@ -218,13 +215,13 @@ function CalendarContainer({ ...props }) {
             setShowDetails(true);
         }, []
     );
-    
+
     // This function is passed as a prop into the EventDetails component. When a user clicks on the "Edit" button, the event that is displayed on the EventDetails modal is sent to this function, which then reformats the dates and sends that event to the CreateEvent component. It also closes the EventDetails modal and opens the CreateEvent modal.
     const passEventToUpdateForm = (event) => {
-        let {start, end} = event;
+        let { start, end } = event;
         start = formatDate(start);
         end = formatDate(end);
-        event = {...event, start: start, end: end};
+        event = { ...event, start: start, end: end };
         setEventDetailsEvent(event);
         setShowDetails(false);
         setShowModal(true);
@@ -240,7 +237,7 @@ function CalendarContainer({ ...props }) {
 
     return (
         <>
-        {loggedIn ? (
+            {loggedIn ? (
                 <div className='mt-2' {...props}>
                     <CreateEvent
                         showModal={showModal}
@@ -289,7 +286,7 @@ function CalendarContainer({ ...props }) {
                     Please log in to view your Calendar
                 </div>
             )
-        }
+            }
         </>
     )
 }

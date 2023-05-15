@@ -1,3 +1,6 @@
+// auth.js file borrowed from EDX Coding Bootcamp, Homework Challenge #21
+// -----
+
 const jwt = require('jsonwebtoken');
 
 // set token secret and expiration date

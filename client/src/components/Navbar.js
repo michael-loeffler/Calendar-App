@@ -1,3 +1,4 @@
+// Navbar borrowed from EDX Coding Bootcamp, Homework Challenge #21
 import React, { useState } from 'react';
 import { Navbar, Nav, Container, Modal, Tab } from 'react-bootstrap';
 import SignUpForm from './SignupForm';
