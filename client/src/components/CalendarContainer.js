@@ -189,9 +189,8 @@ function CalendarContainer({ ...props }) {
             } catch (error) {
                 console.error(error);
             }
-        },
-        []
-    )
+        }, []
+    );
 
     const handleSelectEvent = useCallback(
         (event) => {

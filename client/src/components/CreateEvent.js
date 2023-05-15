@@ -74,7 +74,8 @@ const CreateEvent = ({dragStart, dragEnd, setDragStart, setDragEnd, showModal, t
   return (
     <>
       <button
-        className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline mb-2"
+        className= "createBtn"
+        style = {{ background: '#394867', color: 'white', borderRadius: '40px', padding: '14px', marginBottom: '10px', fontWeight: 'bold', hover: 'red'}} 
         onClick={handleOpenModal}
       >
         Create Event
@@ -82,14 +83,25 @@ const CreateEvent = ({dragStart, dragEnd, setDragStart, setDragEnd, showModal, t
       <Modal
         isOpen={isOpen}
         onRequestClose={handleCloseModal}
-        className="z-50 fixed inset-0 overflow-auto bg-opacity-80 bg-gray-900 flex justify-center items-center"
-        overlayClassName="z-40 fixed inset-0 bg-gray-800 bg-opacity-75"
+        className="z-50 fixed inset-0 overflow-auto bg-opacity-40 bg-gray-900 flex justify-center items-center"
+        overlayClassName="z-40 fixed inset-0 bg-gray-800 bg-opacity-25"
       >
         <div className="bg-white rounded-lg px-8 py-6">
+          <div className="mt-1 flex justify-end">
+          <button
+              className="bg-red-400 hover:bg-gray-500 text-white font-semibold rounded-lg py-1 px-3"
+              onClick={() => {
+                toggleModal();
+                clearForm();
+              }}
+            >
+            ✗
+          </button>
+          </div>
           {formType === "Update" ? (
           <h2 className="text-lg font-semibold mb-4">Update Event</h2>)
            : ( <h2 className="text-lg font-semibold mb-4">Create Event</h2> )}
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-1">
             <label>Title:</label> 
             <input
               type="text"
@@ -99,6 +111,7 @@ const CreateEvent = ({dragStart, dragEnd, setDragStart, setDragEnd, showModal, t
               onChange={handleInputChange}
               className="border border-gray-400 rounded-lg py-2 px-4"
             />
+            <label>Start Time:</label>
             <input
               type="datetime-local"
               placeholder="Start"
@@ -107,6 +120,7 @@ const CreateEvent = ({dragStart, dragEnd, setDragStart, setDragEnd, showModal, t
               onChange={handleInputChange}
               className="border border-gray-400 rounded-lg py-2 px-4"
             />
+            <label>End Time:</label>
             <input
               type="datetime-local"
               placeholder="End"
@@ -118,7 +132,7 @@ const CreateEvent = ({dragStart, dragEnd, setDragStart, setDragEnd, showModal, t
             <label>Location:</label>
             <input
               type="text"
-              placeholder="location"
+              placeholder="Location"
               name="location"
               value={eventData.location}
               onChange={handleInputChange}
@@ -127,7 +141,7 @@ const CreateEvent = ({dragStart, dragEnd, setDragStart, setDragEnd, showModal, t
             <label>Description:</label>
             <input
               type="text"
-              placeholder="description"
+              placeholder="Description"
               name="description"
               value={eventData.description}
               onChange={handleInputChange}
@@ -161,15 +175,6 @@ const CreateEvent = ({dragStart, dragEnd, setDragStart, setDragEnd, showModal, t
               Create
             </button>
             )}
-            <button
-              className="bg-gray-400 hover:bg-gray-500 text-white font-semibold rounded-lg py-2 px-6"
-             onClick={() => {
-                toggleModal();
-                clearForm();
-              }}
-            >
-              Cancel
-            </button>
           </div>
         </div>
       </Modal>
