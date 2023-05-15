@@ -8,6 +8,7 @@ Modal.setAppElement('#root');
 const CreateEvent = ({dragStart, dragEnd, setDragStart, setDragEnd, showModal, toggleModal, eventDetailsEvent, setEventDetailsEvent, refetch, formType, setFormType}) => {
   const [isOpen, setIsOpen] = useState(showModal);
   const [eventData, setEventData] = useState({})
+  const [errorOpen, setErrorOpen] = useState(false)
     
   useEffect(() => {
       setIsOpen(showModal);
@@ -20,7 +21,7 @@ const CreateEvent = ({dragStart, dragEnd, setDragStart, setDragEnd, showModal, t
   }, [eventDetailsEvent])
 
   useEffect(() => {
-    setEventData({start: dragStart, end: dragEnd})
+    setEventData({start: dragStart, end: dragEnd, title: '', location: '', description: ''})
   }, [dragStart, dragEnd])
   
   const handleInputChange = (e) => {
@@ -46,6 +47,7 @@ const CreateEvent = ({dragStart, dragEnd, setDragStart, setDragEnd, showModal, t
       clearForm();
     } catch (error) {
       console.error(error);
+      toggleError();
     }
   };
 
@@ -69,6 +71,10 @@ const CreateEvent = ({dragStart, dragEnd, setDragStart, setDragEnd, showModal, t
     setEventDetailsEvent({ title: '', start: '', end: '', description: '', location: '', allDay: false, color: '' });
     setDragStart('');
     setDragEnd('');
+  }
+
+  const toggleError = () => {
+    setErrorOpen(!errorOpen)
   }
 
   return (
@@ -175,6 +181,28 @@ const CreateEvent = ({dragStart, dragEnd, setDragStart, setDragEnd, showModal, t
               Create
             </button>
             )}
+          </div>
+        </div>
+      </Modal>
+      <Modal
+        isOpen={errorOpen}
+        className="z-50 fixed inset-0 overflow-auto bg-opacity-65 bg-gray-900 flex justify-center items-center"
+        overlayClassName="z-40 fixed inset-0 bg-gray-800 bg-opacity-25"
+      >
+        <div className="bg-white rounded-lg px-8 py-6">
+          <div className="mt-1 flex justify-end">
+          <button
+              className="bg-red-400 hover:bg-gray-500 text-white font-semibold rounded-lg py-1 px-3"
+              onClick={() => {
+                toggleError();
+              }}
+            >
+            ✗
+          </button>
+          </div>
+          <h2 className="text-lg font-semibold mb-4 text-danger">Something went wrong!</h2>
+          <div className="flex flex-col gap-1">
+            <p>Title, Start Time, and End Time are all required fields. Please close this message and try again.</p>
           </div>
         </div>
       </Modal>
