@@ -34,7 +34,6 @@ const EventDetail = ({ selectedEvent, showDetails, passEventToUpdateForm, toggle
     <>
       <Modal
         isOpen={isOpen}
-        onRequestClose={onClose}
         className="z-50 fixed inset-0 overflow-auto bg-opacity-40 bg-gray-900 flex justify-center items-center max-width-25 max-height-25"
         overlayClassName="z-40 fixed inset-0 bg-gray-800 bg-opacity-25"
       >
