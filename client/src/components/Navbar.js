@@ -1,3 +1,4 @@
+// Navbar borrowed from EDX Coding Bootcamp, Homework Challenge #21
 import React, { useState } from 'react';
 import { Navbar, Nav, Container, Modal, Tab } from 'react-bootstrap';
 import SignUpForm from './SignupForm';
@@ -10,24 +11,22 @@ const AppNavbar = () => {
 
   return (
     <>
-      <Navbar bg='' variant='muted' expand='lg' className='mb-3' style={{background: '#212A3E',fontSize: '18px', fontWeight: 'bold', color: 'white', textShadow: 'black', borderBottom: '1px solid black'}}>
-  <Container fluid>
-    <Navbar.Toggle aria-controls='navbar' />
-    <Navbar.Collapse id='navbar'>
-      <Nav className='ml-auto'>
-        {/* if user is logged in show saved books and logout */}
-        {Auth.loggedIn() ? (
-          <>
-            <Nav.Link onClick={Auth.logout} style={{border: '2px solid black', borderRadius: '40px', background: '#F1F6F9' }}>Logout</Nav.Link>
-          </>
-        ) : (
-          <Nav.Link onClick={() => setShowModal(true)} style={{border: '2px solid black', borderRadius: '40px', background: '#F1F6F9' }}>Login or Sign Up</Nav.Link>
-        )}
-      </Nav>
-    </Navbar.Collapse>
-  </Container>
-</Navbar>
-      {/* set modal data up */}
+      <Navbar bg='' variant='muted' expand='lg' className='mb-3' style={{ background: '#212A3E', fontSize: '18px', fontWeight: 'bold', color: 'white', textShadow: 'black', borderBottom: '1px solid black' }}>
+        <Container fluid>
+          <Navbar.Toggle aria-controls='navbar' />
+          <Navbar.Collapse id='navbar'>
+            <Nav className='ml-auto'>
+              {Auth.loggedIn() ? (
+                <>
+                  <Nav.Link onClick={Auth.logout} style={{ border: '2px solid black', borderRadius: '40px', background: '#F1F6F9' }}>Logout</Nav.Link>
+                </>
+              ) : (
+                <Nav.Link onClick={() => setShowModal(true)} style={{ border: '2px solid black', borderRadius: '40px', background: '#F1F6F9' }}>Login or Sign Up</Nav.Link>
+              )}
+            </Nav>
+          </Navbar.Collapse>
+        </Container>
+      </Navbar>
       <Modal
         size='lg'
         show={showModal}

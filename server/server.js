@@ -1,3 +1,6 @@
+// Portions of server setup/configuration borrowed from EDX Coding Bootcamp
+// -----
+
 const express = require('express');
 const path = require('path');
 const db = require('./config/connection');
