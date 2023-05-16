@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Modal from 'react-modal'
 import { useMutation } from "@apollo/client"
 import { REMOVE_EVENT} from "../utils/mutations"
+// import '../index';
 
 Modal.setAppElement('#root');
 
@@ -34,7 +35,7 @@ const EventDetail = ({selectedEvent, showDetails, passEventToUpdateForm, onClose
       <Modal
         isOpen={isOpen}
         onRequestClose={onClose}
-        className="z-50 fixed inset-0 overflow-auto bg-opacity-40 bg-gray-900 flex justify-center items-center max-width-25 max-height-25"
+        className="z-50 fixed inset-0 overflow-auto bg-opacity-40 bg-gray-900 flex justify-center items-center max-width-25 max-height-25 modal-class"
         overlayClassName="z-40 fixed inset-0 bg-gray-800 bg-opacity-25"
       >
       <div className="bg-white rounded-lg px-3 py-1">

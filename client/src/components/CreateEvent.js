@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useMutation } from '@apollo/client'
 import { ADD_EVENT, UPDATE_EVENT } from '../utils/mutations'
 import Modal from 'react-modal';
-import '../index';
+// import '../index';
 
 Modal.setAppElement('#root');
 
