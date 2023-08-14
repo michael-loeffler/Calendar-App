@@ -80,6 +80,8 @@ THEN the calendar snaps to the current day and time
 ## Link to deployed application
 [https://sleepy-sierra-54387.herokuapp.com/](https://sleepy-sierra-54387.herokuapp.com/)
 
+Preview: ![](./client/src/assets/calendar-app.png)
+
 ## Credits
 Portions of this application were borrowed from EDX Coding Bootcamp in-class activities and homework challenges:
 - SignupForm, LoginForm, and Navbar -- Homework Challenge #21
